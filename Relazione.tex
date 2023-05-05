@@ -1,0 +1,935 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage{matlab-prettifier,amssymb,listings,titlesec, amsmath}
+\usepackage[margin=2.0cm]{geometry}
+\usepackage{multirow}
+
+\titleformat*{\section}{\large\bfseries}
+
+  \title{Anno accademico 2022-2023 \\ \vspace{20px} \textbf{Elaborato Calcolo Numerico}}
+
+  \author{Autori: \textbf{Cavicchioli Michael}\\
+  \texttt Matricole: \textbf{7051110}
+  \and
+  \textbf{Wu Jinkang}\\
+  \textbf{7029446}
+  \date{}}
+
+\begin{document}
+
+\maketitle
+
+\newpage
+
+\section{Verificare che:
+  \[ -\frac{1}{4}f(x-h) -\frac{5}{6}f(x) + \frac{3}{2}f(x+h)
+    -\frac{1}{2}f(x+2h) +\frac{1}{12}f(x+3h) = hf'(x) + O(h^5) \]}
+
+\textbf{Soluzione:}
+Come primo step siamo andati a calcolare il polinomio di Taylor, centrato in \textit{x},
+per ogni membro presente nell'equazione.
+\begin{align*}
+  f(x-h) = f(x) - hf'(x) + \frac{h^2}{2}f''(x) - \frac{h^3}{6}f'''(x) + \frac{h^4}{24}f''''(x) + O(h^5) \\
+  f(x+h) = f(x) + hf'(x) + \frac{h^2}{2}f''(x) + \frac{h^3}{6}f'''(x) + \frac{h^4}{24}f''''(x) + O(h^5) \\
+  f(x+2h) = f(x) + 2hf'(x) + 2h^2f''(x) + \frac{4h^3}{3}f'''(x) + \frac{2h^4}{3}f''''(x) + O(h^5)       \\
+  f(x+3h) = f(x) + 3hf'(x) + \frac{9h^2}{2}f''(x) + \frac{9h^3}{2}f'''(x) + \frac{27h^4}{8}f''''(x) + O(h^5)
+\end{align*}
+Successivamente, abbiamo sostituito i valori trovati nell'equazione di partenza:
+\begin{align*}
+  - \frac{1}{4}f(x-h)-\frac{5}{6}f(x)+\frac{3}{2}f(x+h)-\frac{1}{2}f(x+2h)+\frac{1}{12}f(x+3h) =                            \\
+  - \frac{1}{4}f(x) + \frac{h}{4}f'(x) - \frac{h^2}{8}f''(x) + \frac{h^3}{24}f'''(x) - \frac{h^4}{96}f''''(x) +             \\
+  - \frac{5}{6}f(x) +                                                                                                       \\
+  + \frac{3}{2}f(x) + \frac{3h}{2}f'(x) + \frac{3h^2}{4}f''(x) + \frac{h^3}{4}f'''(x) + \frac{h^4}{16}f''''(x) +            \\
+  - \frac{1}{2}f(x) - hf'(x) - h^2f''(x) - \frac{2h^3}{3}f'''(x) - \frac{h^4}{3}f''''(x) +                                  \\
+  + \frac{1}{12}f(x) + \frac{h}{4}f'(x) + \frac{3h^2}{8}f''(x) + \frac{3h^3}{8}f'''(x) + \frac{9h^4}{32}f''''(x) + O(h^5) = \\
+  + hf'(x) + O(h^5)
+\end{align*}
+Infine, abbiamo ugualiato il risultato trovato, con la parte destra dell'equazione
+\[ hf'(x) + O(h^5) = hf'(x) + O(h^5) \]
+dimostrando quanto richiesto.
+
+\section{Matlab utilizza la doppia precisione IEEE. Stabilire, pertanto,
+  il nesso tra la variabile eps e la precisione di macchina di questa aritmetica.}
+
+Sapendo che la precisione di macchina \textit{u} (nel caso si usi l'arrotondamento) si ottiene come: \textit{\[u =\frac{1}{2}b^{1-m}\]}
+dove b e' la base scelta, mentre m e' il numero di cifre usate per la mantissa. Nello standard IEEE la base b corrisponde a 2,
+mentre il numero usato per la mantissa e' pari a 52. Allora, la precisione di macchina sara':  \textit{\[u =\frac{1}{2}2^{1-52}=2^{-52}\]}
+Questo valore e' il medesimo contenuto nella variabile \textbf{eps} di Matlab.
+Infatti, la precisione di macchina e' definita come il massimo errore relativo dovuto alla rappresentazione in aritmetica finita di un numero reale.
+
+\section{Spiegare il fenomeno della cancellazione numerica. Fare un esempio che la illustri, spiegandone i dettagli.}
+
+La cancellazione numerica consiste nella perdita di cifre
+significative, nel risultato derivante dalla somma di addendi
+quasi opposti. Questo rispecchia il mal condizionamento di
+questa operazione. Infatti, se X e Y sono i due numeri da sommare,
+il numero di condizione si vede essere dato da:
+\[
+  \frac{|X| + |Y|}{|X + Y|}
+\] che non e' limitato superiormente se: $$ X \approx -Y $$
+
+\section{Scrivere una function Matlab, radice\textit{(x)} che, avendo in ingresso un numero x non negativo,
+calcoli $ \sqrt[6]{x} $ utilizzando solo operazioni algebriche elementari, con la massima precisione possibile.
+Confrontare con il risultato fornito da $ x^{\frac{1}{6}} $ per 20 valori di x, equispaziati logaritmicamente nell'intervallo [1e-10,1e10],
+tabulando i risultati in modo che si possa verificare che si e' ottenuta la massima precisione possibile.}
+
+\begin{lstlisting}[style=Matlab-editor]
+  function rad = radice(x)
+  %rad = radice(x)
+  %Input: x, numero di cui si vuole conoscere la radice
+  %Output: rad, radice sesta del numero in input
+  %Restituisce la radice sesta del numero passato in input.
+  
+  if x==0
+      rad=0;
+      return;
+  end
+  if x<0, error("Non esiste la radice sesta di un numero negativo." + newline + "Riprovare."), end
+  x0=x;
+  for i=0:1000
+      delta=(1/6)*((x/(x0.^5))-x0);
+      x0=x0+delta;
+      if (abs(delta)<abs(eps)) %controllo di aver raggiunto la massima precisione possibile
+          break; 
+      end
+  end
+  rad=x0;
+  return;
+\end{lstlisting}
+\begin{center}
+  \begin{tabular}{ |p{2.7cm}||p{2.7cm}|p{2.7cm}| }
+    \hline
+    \multicolumn{3}{|c|}{ \textbf{Dati - Tabella di confronto}} \\
+    \hline
+    \textbf{Valore} & $ \sqrt[6]{x} $ & \textbf{radice(x)}      \\
+    \hline
+    1e-10           & 0.021544        & 0.021544                \\
+    1.128838e-09    & 0.0322680       & 0.0322680               \\
+    1.274275e-08    & 0.048330        & 0.048330                \\
+    1.438445e-07    & 0.072385        & 0.072385                \\
+    1.623777e-06    & 0.108415        & 0.108415                \\
+    1.832981e-05    & 0.162378        & 0.162378                \\
+    2.079138e-04    & 0.243201        & 0.243201                \\
+    2.335721e-03    & 0.364253        & 0.364253                \\
+    2.636651e-02    & 0.545559        & 0.545559                \\
+    2.976351e-01    & 0.817110        & 0.817110                \\
+    3.359818e+00    & 1.223825        & 1.223825                \\
+    3.792690e+01    & 1.832981        & 1.832981                \\
+    4.281332e+02    & 2.745342        & 2.745342                \\
+    4.832930e+03    & 4.111829        & 4.111829                \\
+    5.455595e+04    & 6.158482        & 6.158482                \\
+    6.158482e+05    & 9.223851        & 9.223851                \\
+    6.951927e+06    & 13.815000       & 13.815000               \\
+    7.847600e+07    & 20.691381       & 20.691381               \\
+    8.858668e+08    & 30.990463       & 30.990463               \\
+    10000000000     & 46.415888       & 46.415888               \\
+    \hline
+  \end{tabular}
+\end{center}
+
+E' stato possibile ottenere la massima precisione andando ad utilizzare, come tolleranza,
+la precisione di macchina, la quale è contenuta nella variabile \textbf{eps} di Matlab.
+Se avessimo usato una qualsiasi altra tolleranza (ovviamente inferiore), non ci sarebbe
+stata garanzia che la tolleranza fosse rispettata.
+
+\section{Scrivere \textit{function} Matlab distinte che implementino efficientemente i metodi di Newton
+e delle secanti per la ricerca degli zeri di una funzione \textit{f(x)}. Per tutti i metodi, utilizzare
+come criterio di arresto $$ |x_{n+1} - x_n| \le \textit{tol} \cdot (1 + |x_n|),  $$
+essendo \textit{tol} una opportuna tolleranza specificata in ingresso.
+Curare particolarmente la robustezza del codice.}
+\begin{lstlisting}[style=Matlab-editor]
+  function [x, passi, valutazioni_funzionali] = newton(x0, f, f1, tol, max)
+%[x, passi, valutazioni_funzionali] = newton(x0, f, f1, tol, max)
+%Input
+%x0 = Punto di partenza
+%f = Funzione di cui si vuole conoscere la radice
+%f1 = Derivata prima della funzione f
+%Input opzionali:
+%tol = Tolleranza richiesta (default = impostata sulla precisone di macchina)
+%max = Numero massimo di iterazioni (default = impostati a 1000)
+%Output
+%x = Soluzione approssimata
+%passi = Numero di passi effetutati prima di raggiungere la tolleranza desiderata 
+%valutazioni_funzionali = Numero di valutazioni funzionali effettuate dal metodo
+%Calcola un'approssimazione della radice della funzione passata come argomento.
+
+if ~exist("max", "var"), max=1000; end
+if ~exist("tol", "var"), tol=eps; end
+
+passi=1;
+valutazioni_funzionali = 0;
+fx=f(x0);
+f1x=f1(x0);
+valutazioni_funzionali = valutazioni_funzionali + 2;
+if(f1x==0),error("Derivata prima uguale a 0." + newline + "Riprovare."),end
+x=x0-fx/f1x;
+while(passi < max) && abs(x-x0)>tol*(1+abs(x0))
+    passi=passi+1;
+    x0=x;
+    fx=f(x0);
+    f1x=f1(x0);
+    valutazioni_funzionali = valutazioni_funzionali + 2;
+    if(f1x==0),error("Derivata prima uguale a 0." + newline + "Riprovare."),end
+    x=x0-fx/f1x;
+end
+if abs(x-x0)>tol*(1+abs(x0)),error("Il metodo non converge." + newline + "Riprovare."),end
+\end{lstlisting}
+
+\begin{lstlisting}[style=Matlab-editor]
+  function [x, passi, valutazioni_funzionali] = secanti(x0, x1, func, tol, max)
+  %[x, passi, valutazioni_funzionali] = secanti(x0, x1, f, tol, max)
+  %Input:
+  %x0 = Punto di partenza
+  %x1 = Punto calcolato con un iterazione del metodo di Newton da x0
+  %func = Funzione di cui si vuole conoscere la radice
+  %Input opzionali:
+  %tol = Tolleranza richiesta (default = impostata sulla precisone di macchina)
+  %max = Numero massimo di iterazioni (default = impostati a 1000)
+  %Output:
+  %x = Soluzione approssimata
+  %passi = Numero di passi effetutati prima di raggiungere la tolleranza desiderata 
+  %valutazioni_funzionali = Numero di valutazioni funzionali effettuate dal metodo
+  %Calcola un'approssimazione della radice della funzione passata come argomento.
+  
+  if ~exist("tol", "var"), tol=eps; end 
+  if ~exist("max", "var"), max=1000; end
+  valutazioni_funzionali = 0;
+  passi=0;
+  f=func(x0);
+  valutazioni_funzionali = valutazioni_funzionali +1;
+  x=x1;
+  for i=1:max
+      passi=passi+1;
+      if(abs(x-x0)<tol*(1+abs(x0))), break, end;
+      f0=f;
+      f=func(x);
+      valutazioni_funzionali = valutazioni_funzionali +1;
+      if(f0==f), disp("Precisione massima raggiunta."),break,end
+      x1=(f*x0-f0*x)/(f-f0); 
+      x0=x;
+      x=x1;
+  end
+  if abs(x-x1)>tol*(1+abs(x0)), disp("Il metodo non converge."), end
+\end{lstlisting}
+
+\section{Utilizzare le \textit{function} del precedente esercizio per determinare una approssimazione
+  della radice della funzione $$ f(x) = x - cos(x), $$ per \textit{tol} = $ 10^{-3}, 10^{-6}, 10^{-9}, 10^{-12} $,
+  partendo da $ x_0 $ = 0 (e $ x_1 $ = 0.1 per il metodo delle secanti).
+  Tabulare i risultati, in modo da confrontare il costo computazionale di ciascun metodo.}
+\textbf{Osservazione:} Il \textit{V.f.}, presente nella tabella, rappresenta le \textit{Valutazioni funzionali}.\\
+\textbf{Soluzione:}
+\begin{center}
+  \setlength\tabcolsep{2pt}
+  \begin{tabular}{|p{3.5cm} | p{1cm} | p{1cm} | p{3.5cm} | p{1cm} | p{1cm} | p{1cm}|}
+    \hline
+    \multicolumn{7}{|c|}{\textbf{Dati - Tabella di confronto}}                                                                                                                                    \\
+    \hline
+    \multicolumn{3}{|c|}{\textbf{Newton}} & \multicolumn{3}{|c|}{\textbf{Secanti}} & \multicolumn{1}{c|}{\textbf{//}}                                                                             \\
+    \hline
+    \multicolumn{1}{|c|}{\textbf{Radice}} & \multicolumn{1}{|c|}{\textbf{Iteraz.}} & \multicolumn{1}{|c|}{\textbf{Val. funz.}}
+                                          & \multicolumn{1}{|c|}{\textbf{Radice}}  & \multicolumn{1}{|c|}{\textbf{Iteraz.}}    & \multicolumn{1}{|c|}{\textbf{Val. funz.}}
+                                          & \multicolumn{1}{c|}{\textbf{tol.}}                                                                                                                    \\
+    \hline
+    0.739085133385284                     & 4                                      & 8                                         & 0.739098562906300                         & 5 & 5 & $ 10^{-3} $  \\
+    0.739085133215161                     & 5                                      & 10                                        & 0.739085133215147                         & 7 & 7 & $ 10^{-6} $  \\
+    0.739085133215161                     & 5                                      & 10                                        & 0.739085133215161                         & 8 & 8 & $ 10^{-9} $  \\
+    0.739085133215161                     & 6                                      & 12                                        & 0.739085133215161                         & 8 & 8 & $ 10^{-12} $ \\
+    \hline
+  \end{tabular}
+  \newline
+\end{center}
+Per calcolare il costo computazionale e' stato fondamentale andare a contare le valutazioni funzionali, eseguite da ogni algoritmo,
+per ogni iterazione. Come dimostra la tabella, e' possibile affermare che il metodo delle \textbf{Secanti} richiede meno valutazioni
+rispetto quello di \textbf{Newton}, dove, per quest'ultimo, e' necessario andare anche a calcolare la derivata prima della funzione, che e':
+\[f'(x) = 1 + sin(x).\]
+
+\section{Utilizzare le \textit{function} del precedente Esercizio 5 per determinare una approssimazione
+della radice della funzione $$ f(x) = [x - cos(x)]^5, $$ per \textit{tol} = $ 10^{-3}, 10^{-6}, 10^{-9}, 10^{-12} $,
+partendo da $ x_0 $ = 0 (e $ x_1 $ = 0.1 per il metodo delle secanti).
+Confrontare con i risultati ottenuti utilizzando il metodo di Newton modificato.
+Tabulare i risultati in modo da confrontare il costo computazionale e l'accuratezza
+di ciascun metodo. Commentare i risultati ottenuti.}
+\textbf{Osservazione:} I campi \textit{It} e \textit{V.f.}, presenti nella tabella, rappresentano rispettivamente
+le \textit{Iterazioni} e \textit{Valutazioni funzionali}.
+\begin{center}
+  \setlength\tabcolsep{2pt}
+  \begin{tabular}{|p{3cm} | p{1cm} | p{1cm} | p{3cm} | p{1cm} | p{1cm} | p{3cm} | p{1cm} | p{1cm} | p{1cm}|}
+    \hline
+    \multicolumn{10}{|c|}{\textbf{Dati - Tabella di confronto}}                                                                                                                                                               \\
+    \hline
+    \multicolumn{3}{|c|}{\textbf{Newton}} & \multicolumn{3}{|c|}{\textbf{Secanti}} & \multicolumn{3}{|c|}{\textbf{Newton mod.}}
+                                          & \multicolumn{1}{c|}{\textbf{//}}                                                                                                                                                  \\
+    \hline
+    \multicolumn{1}{|c|}{\textbf{Radice}} & \multicolumn{1}{|c|}{\textbf{It.}}     & \multicolumn{1}{|c|}{\textbf{V.f.}}
+                                          & \multicolumn{1}{|c|}{\textbf{Radice}}  & \multicolumn{1}{|c|}{\textbf{It.}}         & \multicolumn{1}{|c|}{\textbf{V.f.}}
+                                          & \multicolumn{1}{|c|}{\textbf{Radice}}  & \multicolumn{1}{|c|}{\textbf{It.}}         & \multicolumn{1}{|c|}{\textbf{V.f.}}
+                                          & \multicolumn{1}{c|}{\textbf{tol.}}                                                                                                                                                \\
+    \hline
+    0.732640697751109                     & 20                                     & 40                                         & 0.730145017727562                   & 27  & 27  & 0.739085133385284 & 3 & 8  & $ 10^{-3} $  \\
+    0.739078762321033                     & 51                                     & 102                                        & 0.739075266476228                   & 71  & 71  & 0.739085133215161 & 4 & 10 & $ 10^{-6} $  \\
+    0.739085126905744                     & 82                                     & 164                                        & 0.739085123863387                   & 116 & 116 & 0.739085133215161 & 4 & 10 & $ 10^{-9} $  \\
+    0.739085133208912                     & 113                                    & 226                                        & 0.739085133204814                   & 160 & 160 & 0.739085133215161 & 5 & 11 & $ 10^{-12} $ \\
+    \hline
+  \end{tabular}
+  \newline
+\end{center}
+E' possibile notare che, anche in presenza della medesima radice del punto precedente, la radice stessa non e' semplice, poiche'
+ha molteplicita' 5. Cio' causa un cambiamento dell'ordine di convergenza sia per il metodo di Newton, che delle Secanti: infatti,
+essi non saranno piu' quadratico e $ \frac{\sqrt[]{5}+1}{2} $ rispettivamente. \\
+Inoltre, le valutazioni funzionali del metodo di Newton modificato, risultano essere molto inferiori e piu' stabili,
+linearmente parlando, rispetto agli altri due metodi.
+
+
+\section{Scrivere una \textit{function} Matlab, function x = mialu(A, b) che, data in ingresso una matrice \textbf{A} ed un vettore \textbf{b},
+  calcoli la soluzione del sistema lineare \textbf{Ax=b} con il metodo di fattorizzazione LU con \textit{pivoting} parziale.
+  Curare particolarmente la scrittura e l'efficienza della \textit{function}, e validarla su due esempi non banali, generati casualmente,
+  di cui sia nota la soluzione.}
+\begin{lstlisting}[style=Matlab-editor]
+  function x = mialu(A, b)
+  %x = mialu(A, b)
+  %Input:
+  %A = Matrice quadrata nonsingolare.
+  %b = Vettore dei termini noti.
+  %Output:
+  %x = Soluzione del sistema.
+  %Risolve il sistema lineare Ax = b, andando ad utilizzare la fattorizzazione LU con pivoting parziale.
+  
+  if(size(A, 1)~=size(A, 2)), error("La matrice non e' quadrata."), end
+  if(size(b, 2) > 1), error("Deve essere inserito il vettore dei termini noti." + newline + "Riprovare."), end
+  if(size(A, 1)~=size(b, 1)), error("La matrice e il vettore dei termini noti non hanno la stessa dimensione."), end
+  
+  [LU,p] = LUpivot(A); %Fattorizzazione di A con fattorizzazione LU con pivoting parziale
+  x = b;
+  x = x(p); %Cambio le posizioni degli elementi del vettore dei termini noti con quelle effettuate per il pivoting
+  x = LUsolve(LU, x); %Risolvo il sistema
+  return
+  end
+  
+  function [LU, p] = LUpivot(A)
+  %[LU, p] = LUpivot(A)
+  %Input:
+  %A = Matrice quadrata nonsingolare.
+  %Output:
+  %LU = Fattorizzazione LU di A.
+  %p = Vettore delle permutazioni (che tiene traccia di tale fattorizzazione).
+  %Esegue la fattorizzazione LU con pivoting parziale.
+  
+  LU = A;
+  n = size(LU);
+  p = [1:n];
+  for i = 1:n-1
+      [maxv, k] = max(abs(LU(i:n, i)));   %Considero il valore massimo del vettore in argomento
+      if(maxv == 0), error("La matrice e' singolare." + newline + "Riprovare."), end
+      k = k+i-1;
+      if k>i
+          LU([i k],:) = LU([k i],:); %Scambio le righe 
+          p([i k]) = p([k i]);  %Salvo lo scambio nel vettore
+      end
+      LU(i+1:n, i) = LU(i+1:n, i) / LU(i, i);
+      LU(i+1:n, i+1:n) = LU(i+1:n, i+1:n) - LU(i+1:n, i) * LU(i, i+1:n);
+  end
+  return
+  end
+  
+  function x = LUsolve(LU, b)
+  %x = LUsolve(LU, b)
+  %Input:
+  %LU = Fattorizzazione LU di una matrice quadrata nonsingolare.
+  %b = Vettore dei termini noti.
+  %Output:
+  %x = Soluzione del sistema.
+  %Risolve il sistema LUx = b
+  
+  x = b(:);
+  n = size(LU);
+  for i=1:n-1
+      x(i+1:n)=x(i+1:n)-LU(i+1:n,i)*x(i);  %L
+  end
+  for i=n:-1:1
+      x(i)=x(i)/LU(i,i);
+      x(1:i-1)=x(1:i-1)-LU(1:i-1,i)*x(i); %U
+  end
+  return
+  end
+\end{lstlisting}
+
+I test sono stati effettuati generando casualmente le matrici, mediante la funzione \textit{randi} di Matlab, e i vettori dei termini noti,
+con il medesimo procedimento.
+\\ \\
+\textbf{1° Test:}
+\[
+  A =
+  \begin{bmatrix}
+    6 & 2 & 4 \\
+    3 & 7 & 7 \\
+    8 & 2 & 8
+  \end{bmatrix},
+  b =
+  \begin{bmatrix}
+    1 \\ 9 \\ 7
+  \end{bmatrix}
+\]
+\textbf{Soluzione:}
+\[
+  x =
+  \begin{bmatrix}
+    -1.10344827586207  \\
+    -0.293103448275862 \\
+    2.05172413793103
+  \end{bmatrix}
+\]
+
+\textbf{2° Test:}
+\[
+  A =
+  \begin{bmatrix}
+    6 & 4 & 4 \\
+    5 & 2 & 6 \\
+    1 & 8 & 2
+  \end{bmatrix},
+  b =
+  \begin{bmatrix}
+    6 \\ 3 \\ 6
+  \end{bmatrix}
+\]
+\textbf{Soluzione:}
+\[
+  x =
+  \begin{bmatrix}
+    0.75 \\
+    0.75 \\
+    -0.375
+  \end{bmatrix}
+\]
+
+La complessità per la funzione LUpivoting e' di circa $ \frac{2}{3}n^3 $, mentre per la risoluzione del sistema lineare e' di circa $ n^2 $.
+
+\section{Scrivere una \textit{function} Matlab, function x = mialdl(A, b) che, dati in ingresso una matrice sdp \textbf{A} ed un vettore \textbf{b},
+  calcoli la soluzione del corrispondente sistema lineare utilizzando la fattorizzazione \textbf{$LDL^T$}.
+  Curare particolarmente la scrittura e l'efficienza della \textit{function}, e validarla su due esempi non banali, generati casualmente,
+  di cui sia nota la soluzione.}
+\begin{lstlisting}[style=Matlab-editor]
+  function x = mialdl(A, b)
+  %x = mialdl(A, b)
+  %Input:
+  %A: Matrice simmetrica definita positiva(sdp).
+  %b: Vettore dei termini noti.
+  %Output:
+  %x: Soluzione del sistema lineare.
+  %Risolve il sistema Ax = b, andando ad utilizzare la fattorizzazione LDL^t.
+  
+  if(size(A, 1)~=size(A, 2)), error("La matrice non e' quadrata." + newline + "Riprovare."), end
+  if(size(A, 1)~=size(b)), error("La dimensione del vettore dei termini noti e quella della matrice non coincidono." + newline + "Riprovare."), end
+     
+  LDLt = fattLDLt(A); %Fattorizzo la matrice tramite la fattorizzazione LDLt
+  x = ltud(LDLt, b); %Risolvo il sistema Lx = b
+  x = diagonal(LDLt, x);  %Risolvo Dx = b (b e' la soluzione 'x' precedente)
+  x = utud(LDLt', x); %Risolvo il sistema L'x = b (b e' la soluzione 'x' precedente)
+  return;
+  end
+      
+  function LDLt = fattLDLt(A)
+  %LDLt = fattLDLt(A)
+  %Input:
+  %A = Matrice simmetrica definita positiva(sdp).
+  %Output:
+  %LDLt: Fattorizzazione della matrice A in LDLt:
+  % -L = Matrice triangolare inferiore a diagonale unitaria.
+  % -D = Matrice diagonale.
+  %Esegue la fattorizzazione LDL^t.
+  
+  n = size(A);
+  LDLt = A;
+  if(LDLt(1, 1) <= 0), error("La matrice non e' sdp." + newline + "Riprovare."), end
+  LDLt(2:n, 1) = LDLt(2:n, 1)/LDLt(1, 1);
+  for i = 2:n
+      v = (LDLt(i, 1:i-1).').*diag(LDLt(1:i-1, 1:i-1));
+      LDLt(i, i) = LDLt(i, i) - LDLt(i, 1:i-1)*v;
+      if(LDLt(i,i) <= 0), error("La matrice non e' sdp." + newline + "Riprovare."), end
+      LDLt(i+1:n, i) = (LDLt(i+1:n, i)-LDLt(i+1:n, 1:i-1) *v)/LDLt(i, i);
+  end
+  return;
+  end
+      
+  function b = ltud(L, b)
+  %b = ltud(L, b)
+  %ltud = triangolare inferiore a diagonale unitaria.
+  %Input:
+  %L = Matrice triangolare inferiore a diagonale unitaria.
+  %b = Vettore dei termini noti.
+  %Output:
+  %b = Soluzione del sistema.
+  %Risolve un sistema triangolare inferiore.
+  
+  n = size(L, 1);
+  for i = 1:n
+     b(i)=b(i)-L(i,1:i-1)*b(1:i-1);
+  end
+  end
+      
+  function x = diagonal(D, b)
+  %x = diagonal(D, b)
+  %Input:
+  %D = Matrice diagonale
+  %b = Vettore dei termini noti
+  %Output:
+  %x = Soluzione del sistema lineare Dx = b
+  %Risolve un sistema diagonale.
+  
+  n = size(D);
+  x = b(:);
+  for i = 1:n
+      x(i) = x(i)/D(i, i);
+  end
+  end
+      
+  function x = utud(U, b)
+  %x = utud(U, b)
+  %utud = triangolare superiore a diagonale unitaria.
+  %Input:
+  %U = Matrice triangolare superiore a diagonale unitaria.
+  %b = Vettore dei termini noti.
+  %Output:
+  %x = Soluzione del sistema lineare Ux = b.
+  %Risolve un sistema triangolare superiore.
+  
+  n = size(U);
+  x = b(:);
+  for i = n:-1:1
+    x(i)=x(i)-U(i,i+1:n)*x(i+1:n);
+  end
+  end
+\end{lstlisting}
+
+I test sono stati effettuati generando casualmente le matrici, le quali sono state moltiplicate per la medesima trasposta,
+in maniera tale da ottenere, quasi sicuramente, una matrice SDP.
+\\ \\
+\textbf{1° Test:}
+\[
+  A =
+  \begin{bmatrix}
+    7 & 4 & 7 \\
+    7 & 6 & 1 \\
+    7 & 2 & 3
+  \end{bmatrix},
+  b =
+  \begin{bmatrix}
+    1 \\ 1 \\ 8
+  \end{bmatrix}
+\]
+\textbf{Soluzione:}
+\[
+  x =
+  \begin{bmatrix}
+    -0.583469387755103  \\
+    -0.379183673469388 \\
+    1.25448979591837
+  \end{bmatrix}
+\]
+
+\textbf{2° Test:}
+\[
+  A =
+  \begin{bmatrix}
+    7 & 1 & 7 \\
+    3 & 4 & 8 \\
+    9 & 4 & 2
+  \end{bmatrix},
+  b =
+  \begin{bmatrix}
+    5 \\ 5 \\ 6
+  \end{bmatrix}
+\]
+\textbf{Soluzione:}
+\[
+  x =
+  \begin{bmatrix}
+    -0.055555555555556 \\
+    0.0617283950617285 \\
+    0.0679012345679013
+  \end{bmatrix}
+\]
+
+Entrambe le soluzioni sono corrette e possono essere controllate mediante l'operazione \textit{Ax-b} che risulta
+essere uguale a 0. Si osserva che vi e' un piccolissimo errore di rappresentazione, in entrambe le soluzioni,
+ma e' trascurabile poiche' e' inferiore alla precisione di macchina.
+\\
+La complessita' del metodo \textit{fattLDLt} e' di $ \frac{1}{3}n^3 $, mentre circa $ n^2 $ per risolvere
+il sistema lineare.
+
+\section{Scrivere una \textit{function} Matlab, function $ [x, nr] $ = miaqr(A, b) che, data in ingresso
+  la matrice A \textit{m} x \textit{n}, con \textit{m} $ \ge $ \textit{n} = rank(A), ed un vettore \textbf{b} di lunghezza m,
+  calcoli la soluzione del sistema lineare A\textbf{x} = \textbf{b} nel senso dei minimi quadrati e, inoltre,
+  la norma, \textit{nr}, del corrispondente vettore residuo. Curare particolarmente la scrittura e l'efficienza
+  della \textit{function}. Validare la \textit{function} \textbf{miaqr} su due esempi non banali, generati
+  casualmente, confrontando la soluzione ottenuta con quella calcolata con l'operatore Matlab \textbackslash}
+\begin{lstlisting}[style=Matlab-editor]
+  function [x, nr] = miaqr(A, b)
+  %[x, nr] = miaqr(A, b)
+  %Input: 
+  %A = Matrice sovradimensionata a rango massimo.
+  %b = Vettore dei termini noti.
+  %Output: 
+  %x = Soluzione del sistema.
+  %nr = Norma euclidea del vettore residuo.
+  %Risolve il sistema Ax = b nel senso dei minimi quadrati e ritorna la norma euclidea del vettore residuo.
+  
+  [m, n] = size(A);
+  if (n>=m),error("Il sistema non e' sovradeterminato." + newline + "Riprovare."),end
+  k = size(b,1);
+  if(m~=k), error("La dimensione della matrice e quella dei termini noti sono differenti." + newline + "Riprovare."), end
+  if(size(b,2)>1),error("Non e' stato inserito un vettore dei termini noti corretto." + newline + "Riprovare."),end
+  
+  QR = QRfatt(A); %Fattorizzo A tramite la fattorizzazione QR di Householder
+  [x,nr] = QRsolve(QR,b); %Risolvo il sistema
+  return;
+  end
+  
+  function QR = QRfatt(A)
+  %QR = QRfatt(A)
+  %Input: 
+  %A = Matrice sovradimensionata a rango massimo.
+  %Output: 
+  %QR = Matrice A fattorizzata QR di Householder.
+  %Esegue la fattorizzazione QR della matrice.
+  
+  [m, n] = size(A);
+  norma_euclidea = norm(A);
+  QR = A;
+  for i = 1:n
+      alfa = norm(QR(i : m, i));
+      if abs(alfa)<=eps*norma_euclidea, error("La matrice non ha rango massimo." + newline + "Riprovare."),end
+      if QR(i,i)>=0, alfa =-alfa; end
+      v1 = QR(i,i)-alfa;
+      QR(i,i) = alfa;
+      QR(i+1:m,i) = QR(i+1:m,i)/v1; %Vettore normalizzato
+      beta = -v1/alfa;
+      QR(i:m,i+1:n) = QR(i: m,i+1:n)-(beta*[1;QR(i+1:m,i)])*([1 QR(i+1:m,i)']*QR(i:m,i+1:n));
+  end
+  end
+  
+  function [x, norma_euclidea] = QRsolve(QR, b)
+  %[x, norma_euclidea] = QRsolve(QR, b)
+  %Input: 
+  %QR = Matrice QR di Householder
+  %b = Vettore dei termini noti
+  %Output: 
+  %x = Soluzione del sistema
+  %norma_euclidea = Norma euclidea del vettore residuo
+  %Risolve il sistema QRx = b e ritorna la norma euclidea del vettore residuo.
+  
+  x = b;
+  [m, n] = size(QR);
+  for i = 1:n
+      v = [1; QR(i+1:m,i)];
+      x(i:m) = x(i:m)-((2*(v*v'))/(v'*v))*x(i:m);
+  end
+  x(1:n) = Usolve(QR(1:n , 1 : n), x(1 : n));
+  norma_euclidea = norm(x(n+1:m)); %Del vettore residuo
+  x=x(1:n);
+  end
+  
+  function b = Usolve(U, b)
+  %b = Usolve(U, b)
+  %Input: 
+  %U = Matrice quadrata triangolare superiore.
+  %b = Vettore dei termini noti.
+  %Output: 
+  %x = Soluzione del sistema.
+  %Risolve il sistema Ux = b.
+  
+  n = size(U,1);
+  for i = n:-1:1
+      if(n > 1)    
+          b(i) = b(i)-U(i, i+1:n)*b(i+1:n);
+      end
+      b(i) = b(i)/U(i,i);
+  end
+  end
+\end{lstlisting}
+
+\textbf{1° Test:}
+\[
+  A =
+  \begin{bmatrix}
+    6 & 2 \\
+    6 & 9 \\
+    4 & 1
+  \end{bmatrix},
+  b =
+  \begin{bmatrix}
+    1 \\ 2 \\ 2
+  \end{bmatrix}
+\]
+\textbf{Soluzione:}
+\[
+  x =
+  \begin{bmatrix}
+    0.260869565217391 \\
+    0.0434782608695652
+  \end{bmatrix},
+  \textit{nr} = 1.12288448436043
+\]
+
+La soluzione e' corretta poiche' e' identica a quella generata dall'operatore 
+$ \backslash $ di Matlab.
+\\ \\
+\textbf{2° Test:}
+\[
+  A =
+  \begin{bmatrix}
+    8 & 1 & 2 \\
+    1 & 5 & 9 \\
+    2 & 4 & 7 \\
+    4 & 2 & 5
+  \end{bmatrix},
+  b =
+  \begin{bmatrix}
+    9 \\ 1 \\ 7 \\ 77
+  \end{bmatrix}
+\]
+\textbf{Soluzione:}
+\[
+  x =
+  \begin{bmatrix}
+    1.13725490196078   \\
+    -0.803921568627453 \\
+    0.705882352941178
+  \end{bmatrix},
+  \textit{nr} = 3.98526698493043
+\]
+
+Anche in questo caso la soluzione e' corretta poiche' e' identica a quella 
+generata dall'operatore $ \backslash $ di Matlab.
+\\
+\\
+La complessita' e' di circa $ \frac{2}{ 3}n^2(3m-n) $, dove \textit{n} e' 
+il numero delle colonne e \textit{m} il numero delle righe. 
+\\
+Inoltre, e' stata utilizzata la definizione di matrice di Householder, 
+andando a fare direttamente il prodotto tra Q e b nel metodo \textit{QRsolve},
+cioe' il prodotto tra i vettori \textit{v} e \textit{x}, rispettivamente. 
+
+\section{Data la \textit{function} Matlab}
+\begin{lstlisting}[style=Matlab-editor]
+  function [A1,A2,b1,b2] = linsis1(n,simme)
+  %
+  %
+  rng(0);
+  [q1,r1] = qr(rand(n));
+  if nargin==2
+  q2 = q1';
+  else
+    [q2,r1] = qr(rand(n));
+  end;
+  A1 = q1*diag([1 2/n:1/n:1])*q2;
+  A2 = q1*diag([1e-10 2/n:1/n:1])*q2;
+  b1 = sum(A1,2);
+  b2 = sum(A2,2);
+  return
+\end{lstlisting}
+  \textbf{che crea sistemi lineari casuali di dimensione \textit{n} con soluzione nota,}
+  $$ A_1x = b_1, A_2x = b_2, x = (1,..,1)^T \in \mathbb{R}^{\textit{n}}, $$
+  \textbf{risolvere, utilizzando la \textit{function} \textbf{mialu}, i sistemi lineari generati da
+  $ [A1,A2,b1,b2]=linsis(5)$}.
+  \textbf{Commentare l'accuratezza dei risultati ottenuti, dandone spiegazione esaustiva.}
+\\\\
+\textbf{Soluzione del primo sistema lineare:}
+\[
+  x_1 =
+  \begin{bmatrix}
+    1.000000000000000 \\
+    1.000000000000000 \\
+    1.000000000000000 \\
+    1.000000000000000 \\
+    1.000000000000000
+  \end{bmatrix}
+\]
+\textbf{Soluzione del secondo sistema lineare:}
+\[
+  x_2 =
+  \begin{bmatrix}
+    0.999999647657477 \\
+    1.000000446226050 \\
+    1.000000098875194 \\
+    1.000000207059384 \\
+    1.000000011600807
+  \end{bmatrix}
+\]
+
+La soluzione del sistema lineare $ A_1x = b_1 $, generata da \textbf{linsis(5)}, calcolata con \textbf{mialu},
+risulta essere calcolata con un'ottima precisione, poiche' il numero di condizionamento della matrice
+di partenza era basso, ovvero: 2.50000000000000e+00.
+\\
+Non e' possibile dire la stessa cosa per la soluzione del sistema lineare $ A_2x = b_2 $, generata da \textbf{linsis(5)},
+calcolata con \textbf{mialu}, poiche' il numero di condizionamento della matrice di partenza era elavato, infatti,
+esso, risulta essere pari a: 9.99999589290263e+09.
+\\
+\textbf{Osservazione:} I due numeri di condizionamento delle matrici sono stati calcolati mediante la funzione \textbf{cond} di Matlab.
+
+
+\section{Risolvere, utilizzando la \textit{function} \textbf{mialdlt}, i sistemi
+  lineari generati da \textbf{$ [A1,A2,b1,b2]=linsis(5,1)$}.
+  \\
+  Commentare l'accuratezza
+  dei risultati ottenuti, dandone spiegazione esaustiva.}
+
+  \textbf{Soluzione del primo sistema lineare:}
+  \[
+    x_1 =
+    \begin{bmatrix}
+      1.000000000000000 \\
+      1.000000000000000 \\
+      1.000000000000000 \\
+      1.000000000000000 \\
+      1.000000000000000
+    \end{bmatrix}
+  \]
+  \textbf{Soluzione del secondo sistema lineare:}
+  \[
+    x_2 =
+    \begin{bmatrix}
+      1.000000078440239 \\
+      1.000000087208138 \\
+      1.000000012226079 \\
+      1.000000087938305 \\
+      1.000000060882494
+    \end{bmatrix}
+  \]
+
+DA FINIRE -> SCRIVERE ACCURATEZZA.
+
+\section{Utilizzare la \textit{function} \textbf{miaqr} per risolvere, nel senso dei
+  minimi quadrati, i sistemi lineari sovradeterminati
+  $$ \textbf{A x = b, (D*A)x = (D*b), (D1*A)x = (D1*b)}, $$
+  definiti dai seguenti dati:
+  $$ \textbf{A = [ 1 3 2; 3 5 4; 5 7 6; 3 6 4; 1 4 2 ];} $$
+  $$ \textbf{b = [ 15 28 41 33 22 ]';} $$
+  $$ \textbf{D = diag(1:5);} $$
+  $$ \textbf{D1 = diag(pi*[1 1 1 1 1]).} $$
+  Calcolare le corrispondenti soluzioni e residui, e commentare i risultati ottenuti.}
+
+   \textbf{Soluzione del sistema lineare Ax = b:}
+  \[
+    x_1 =
+    \begin{bmatrix}
+      3.000000000000008 \\
+      5.800000000000001 \\
+    -2.5000000000000009 
+    \end{bmatrix},
+    \\
+    \textit{nr} = 1.264911064067357
+  \]
+  \\
+  I valori ritornati risultano essere una buona soluzione, nonostante vi sia 
+  una minima inaccuratezza, sempre dovuta alla rappresentazione dei 
+  numeri reali non di macchina.
+  \\\\
+  \textbf{Soluzione del sistema lineare (D*A)x = (D*b):}
+  \[
+    x_2 =
+    \begin{bmatrix}
+     -0.602569986232221 \\
+      4.701698026617711 \\
+      1.758375401560359
+    \end{bmatrix},
+    \\
+    \textit{nr} = 3.735151112342432
+  \]
+  \\
+  In questo caso la norma euclidea risulta essere diversa da quella del primo
+  sistema lineare. Inoltre, i valori della soluzione, confrontati
+  con quelli ottenuti con l'operatore $ \backslash $ di Matlab, risultano
+  essere diversi.
+  \\\\
+  \textbf{Soluzione del sistema lineare (D1*A)x = (D1*b):}
+  \[
+    x_3 =
+    \begin{bmatrix}
+     3.000000000000010 \\
+     5.800000000000003 \\
+   -2.5000000000000013 
+    \end{bmatrix},
+    \\
+    \textit{nr} = 3.973835306318445
+  \]
+  \\
+  In quest'ultimo caso, i valori della soluzione si discostano di un non nulla
+  da quelli del primo sistema, mentre la norma euclidea risulta essere poco
+  piu' che triplicata.
+
+\section{Scrivere una \textit{function} Matlab
+  $$ \textbf{[x,nit] = newton(fun,jacobian,x0,tol,maxit)} $$
+  che implementi efficientemente il metodo di Newton per risolvere sistemi di
+  equazioni nonlineari. Curare particolarmente il criterio di arresto, che deve essere
+  analogo a quello usato nel caso scalare.
+  La seconda variabile, se specificata, ritorna il numero di iterazioni eseguite.
+  Prevedere opportuni valori di \textit{default} per gli ultimi due parametri
+  di ingresso.}
+\begin{lstlisting}[style=Matlab-editor]
+  function [x, nit] = newton_j(fun, jacobian, x0, tol, maxit)
+  %[x, nit] = newton_j(fun, jacobian, x0, tol, maxit)
+  %Input: 
+  %fun = Vettore di funzioni nonlineari di cui vogliamo trovare le radici.
+  %jacobian = Matrice di funzioni contenenti il giacobiano di fun. 
+  %x0 = Vettore di partenza.
+  %Input opzionali:
+  %tol = Tolleranza desiderata(default = precisione di macchina).
+  %max = Massimo numero di iterazioni del metodo(default = 1000).
+  %Output:
+  %x = Vettore contente le radici del sistema non lineare.
+  %nit = Numero di iterazioni compiute dal metodo per trovare la radice.
+  %Trova il vettore soluzione di un sistema di equazioni usando il metodo di Newton partendo da x0
+  
+  if ~exist("tol", "var"), tol=eps; end 
+  if ~exist("maxit", "var"), maxit=1000; end
+  nit=0;
+  x=x0;
+  j=jacobian(x);
+  for i = 1:maxit
+      f = -1*fun(x);
+      dx = mialu(j,f); %Uso la function mialu per ricavarmi il vettore della differenza dx
+      x = x + dx;
+      nit = nit + 1;
+      if(norm(dx)<=tol*(1+norm(x-dx)))   %Controllo se la tolleranza e' rispettata
+          break;
+      end
+  end
+  if (norm(dx)>tol*(1+norm(x-dx))), disp("Il metodo non coverge."), end
+\end{lstlisting}
+
+La funzione converge, quadraticamente, in un opportuno intorno della radice, solo se la funzione stessa ha derivate seconde continue,
+con convergenza locale.
+
+\section{Usare la \textit{function} del precedente esercizio per risolvere, a partire
+dal vettore iniziale nullo, il sistema nonlineare derivante dalla determinazione
+del punto stazionario della funzione:
+\[ f(x) = \frac{1}{2}x^TQx-e^T[sin(\frac{\pi}{2}x)+x],
+  e = \frac{1}{100}
+  \begin{pmatrix}
+    1      \\
+    2      \\
+    \vdots \\
+    100
+  \end{pmatrix} \in \mathbb{R}^{100},
+\]
+\[
+  Q =
+  \begin{pmatrix}
+    2 & 1                   \\
+    1 & \ddots & \ddots     \\
+      & \ddots & \ddots & 1 \\
+      &        & 1      & 2
+  \end{pmatrix} \in \mathbb{R}^{100 \times 100},
+  sin(\frac{\pi}{2}x) =
+  \begin{pmatrix}
+    sin(\frac{\pi}{2}x_1) \\
+    sin(\frac{\pi}{2}x_2) \\
+    \vdots                \\
+    sin(\frac{\pi}{2}x_{100}).
+  \end{pmatrix}
+\]
+utilizzando tolleranze \textbf{tol = 1e-3, 1e-8, 1e-13.} Graficare la soluzione e tabulare in modo conveniente i risultati ottenuti.
+}
+DA FINIRE
+
+\end{document}
