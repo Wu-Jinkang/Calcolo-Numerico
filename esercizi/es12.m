@@ -14,10 +14,12 @@ fprintf("\nb2:\n");
 fprintf([repmat('%.15f\t', 1, size(b2, 2)) '\n'], b2');
 %}
 
+disp(cond(A1));
 x1 = mialdl(A1, b1);
 fprintf("\nx1:\n");
 fprintf([repmat('%.15f\t', 1, size(x1, 2)) '\n'], x1');
 
+disp(cond(A2));
 x2 = mialdl(A2, b2);
 fprintf("x2:\n");
 fprintf([repmat('%.15f\t', 1, size(x2, 2)) '\n'], x2');

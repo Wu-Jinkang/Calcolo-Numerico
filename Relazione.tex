@@ -796,7 +796,13 @@ esso, risulta essere pari a: 9.99999589290263e+09.
     \end{bmatrix}
   \]
 
-DA FINIRE -> SCRIVERE ACCURATEZZA.
+Nel primo caso e' possibile notare che i valori restituiti sono tutti uguali a 1,
+e questo e' dovuto anche al fatto che il numero di condizionamento del sistema
+era basso (2.5).
+\\
+Non e' possibile dire lo stesso per la seconda soluzione, la quale ha dei valori
+diversi dal primo, dovuto al fatto che vi e' un numero di condizionamento 
+molto elevato del sistema (99999995645.80569).
 
 \section{Utilizzare la \textit{function} \textbf{miaqr} per risolvere, nel senso dei
   minimi quadrati, i sistemi lineari sovradeterminati
@@ -931,5 +937,256 @@ del punto stazionario della funzione:
 utilizzando tolleranze \textbf{tol = 1e-3, 1e-8, 1e-13.} Graficare la soluzione e tabulare in modo conveniente i risultati ottenuti.
 }
 DA FINIRE
+\begin{center}
+  \begin{tabular}{ |p{2.7cm}||p{2.7cm}|p{2.7cm}| }
+    \multicolumn{3}{|c|}{ \textbf{Dati - Tabella di confronto}} \\
+    \hline
+    \textbf{1e-3} & \textbf{1e-8} & \textbf{1e-13}      \\
+    \hline
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & \\
+    & & 
+    \hline
+  \end{tabular}
+\end{center}
 
+
+\section{
+  Costruire una function, \textbf{lagrange.m}, avente la \underline{stessa sintassi} della function spline
+  di Matlab, che implementi, in modo \underline{vettoriale}, la forma di Lagrange del polinomio interpolante una
+  funzione.
+  \textbf{N.B.:} il risultato dovr`a avere \underline{le stesse dimensioni} del dato di ingresso; questo vale anche per gli
+  esercizi a seguire.
+}
+DA FINIRE
+
+\section{
+  Costruire una function, \textbf{newton.m}, avente la \underline{stessa sintassi} della function \textbf{spline}
+di Matlab, che implementi, in modo \underline{vettoriale}, la forma di Newton del polinomio interpolante una
+funzione.
+}
+DA FINIRE
+
+\section{
+  Costruire una function, \textbf{hermite.m}, avente sintassi
+  $$ yy = hermite( xi, fi, f1i, xx) $$
+  che implementi, in modo \underline{vettoriale}, il polinomio interpolante di Hermite.
+}
+DA FINIRE
+
+\section{
+  Costruire una function Matlab che, specificato in ingresso il grado n del polinomio
+  interpolante, e gli estremi dell'intervallo [a, b], calcoli le corrispondenti ascisse di Chebyshev.
+}
+DA FINIRE 
+
+\section{
+  Costruire una function Matlab, con sintassi
+ $$ ll = lebesgue( a, b, nn, type ), $$
+che approssimi la costante di Lebesgue per l'interpolazione polinomiale sull'intervallo \textbf{[a,b]}, per
+i polinomi di grado specificato nel vettore \textbf{nn}, utilizzando ascisse equidistanti, se \textbf{type=0}, o di
+Chebyshev, se \textbf{type=1} (utilizzare 10001 punti equispaziati nell'intervallo \textbf{[a,b]} per ottenere cia-
+scuna componente di ll). Graficare i risultati ottenuti, per \textbf{nn=1:100}, utilizzando \textbf{[a,b]=[0,1]} e
+\textbf{[a,b]=[-3,7]}. Giustificare i risultati ottenuti.
+}
+DA FINIRE
+
+\section{
+  Utilizzando le function dei precedenti esercizi, graficare (in semilogy) l'andamento
+errore di interpolazione (utilizzare 10001 punti equispaziati nell'intervallo per ottenerne la stima)
+per la funzione di Runge,
+$$ f(x) = \frac{1}{1+x^2}, x\in[-5,5], $$
+utilizzando sia le ascisse equidistanti che di Chebyshev, per i polinomi interpolanti di grado \textbf{nn=2:2:100}.
+Graficare l'errore di interpolazione anche per i polinomi interpolanti di Hermite di grado \textbf{nn=3:2:99},
+sia utilizzando ascisse equidistanti che ascisse di Chebyshev, nell'intervallo considerato.
+}
+DA FINIRE
+
+\section{
+  Costruire una function, \textbf{myspline.m}, avente sintassi
+$$ yy = myspline( xi, fi, xx, type ) $$
+dove \textbf{type=0} calcola la \textit{spline} cubica interpolante naturale i punti \textbf{(xi,fi)}, e \textbf{type~=0} calcola quella
+\textit{not-a-knot} (default).
+}
+DA FINIRE
+
+\section{
+  Graficare, utilizzando il formato semilogy, l'errore di approssimazione utilizzando le
+\textit{spline} interpolanti naturale e \textit{not-a-knot} per approssimare la funzione di Runge sull'intervallo $ [-5,5] $,
+utilizzando una partizione $ \delta = {-5 = x_0 < \cdots < x_n = 5} $, con ascisse equidistanti e \textbf{n=4:4:400}.
+\\
+Utilizzare 10001 punti equispaziati nell'intervallo $ [-5,5] $ per ottenere la stima dell'errore.
+}
+DA FINIRE
+
+\section{
+  E' noto che un fenomeno fisico evolve come $ y = x^n$, con \textit{n} incognito. Il file \textbf{data.mat},
+reperibile a:
+$$ https://drive.google.com/file/d/14u2Pjnl_BZN1GWEFCZd0tqKCObGGI-M5 $$
+$$ /view?usp=share_link $$
+contiene 1000 coppie di dati $ (x_i, y_i) $, in cui la seconda componente `e affetta da un errore con di-
+stribuzione Gaussiana a media nulla e varianza "piccola". Utilizzando un opportuno polinomio
+di approssimazione ai minimi quadrati, stimare il grado \textit{n}. Argomentare il procedimento seguito,
+graficando la norma del residuo rispetto a valori crescenti di n. `E richiesto il codice Matlab dell'al-
+goritmo che avrete implementato (potete utilizzare, se lo ritenete opportuno, la function \textbf{polyfit}
+di Matlab).
+}
+DA FINIRE
+
+\section{
+  Costruire una function Matlab che, dato in input \textit{n}, restituisca i pesi della qua-
+dratura della formula di Newton-Cotes di grado \textit{n}. Tabulare, quindi, i pesi delle formule di grado
+1, 2,. . . , 7 e 9 (come \underline{numeri razionali}).
+}
+DA FINIRE
+
+\section{
+  Scrivere una function Matlab,
+$$ [If,err] = composita( fun, a, b, k, n ) $$
+che implementi la formula composita di Newton-Cotes di grado \textbf{k} su \textbf{n+1} ascisse equidistanti, con \textbf{n}
+multiplo pari di \textbf{k}, in cui:
+\\
+\textbullet \textbf{fun} e' la funzione integranda (che accetta input vettoriali);
+\\
+\textbullet \textbf{[a,b]} e' l'intervallo di integrazione;
+\\
+\textbullet \textbf{k, n} come su descritti;
+\\
+\textbullet \textbf{If} e' l'approssimazione dell'integrale ottenuta;
+\\
+\textbullet \textbf{err} e' la stima dell'errore di quadratura.
+}
+DA FINIRE
+
+\section{
+  Utilizzare la function \textbf{composita} per ottenere l'approssimazione dell'integrale
+  $$ 
+  \int_{0}^{1} 
+    (\sum_{i=1}^{5} i \cos 2 \pi ix - e^i \sin 2(\pi i + 0.1)x) 
+  \, dx  
+  $$
+  con le formule composite di Newton-Cotes di grado \textbf{k=1,2,3,4,5,6}. Per tutte, utilizzare \textbf{n=12}.
+}
+DA FINIRE
+
+\section{
+  Implementare la formula composita adattativa di Simpson.
+}
+DA FINIRE
+
+\section{
+  Implementare la formula composita adattativa di Newton-Cotes di grado \textbf{k=4}.
+}
+DA FINIRE
+
+\section{
+  Confrontare le formule adattative degli ultimi due esercizi, tabulando il numero
+di valutazioni funzionali effettuate, rispetto alla tolleranza \textbf{tol = 1e-2, 1e-3, ..., 1e-9}, per
+ottenere l'approssimazione dell'integrale
+$$ 
+  \int_{10^{-5}}^{1} 
+    x^{-1} \cos(\log x^{-1})
+  \, dx \equiv \sin \log 10^5.
+$$
+Costruire un'altra tabella, in cui si tabula l'errore vero (essendo l'integrale noto, in questo caso)
+rispetto a \textbf{tol}.
+}
+DA FINIRE
 \end{document}
