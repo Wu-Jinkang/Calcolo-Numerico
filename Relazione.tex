@@ -521,7 +521,7 @@ in maniera tale da ottenere, quasi sicuramente, una matrice SDP.
 \[
   x =
   \begin{bmatrix}
-    -0.583469387755103  \\
+    -0.583469387755103 \\
     -0.379183673469388 \\
     1.25448979591837
   \end{bmatrix}
@@ -671,7 +671,7 @@ il sistema lineare.
   \textit{nr} = 1.12288448436043
 \]
 
-La soluzione e' corretta poiche' e' identica a quella generata dall'operatore 
+La soluzione e' corretta poiche' e' identica a quella generata dall'operatore
 $ \backslash $ di Matlab.
 \\ \\
 \textbf{2° Test:}
@@ -699,16 +699,16 @@ $ \backslash $ di Matlab.
   \textit{nr} = 3.98526698493043
 \]
 
-Anche in questo caso la soluzione e' corretta poiche' e' identica a quella 
+Anche in questo caso la soluzione e' corretta poiche' e' identica a quella
 generata dall'operatore $ \backslash $ di Matlab.
 \\
 \\
-La complessita' e' di circa $ \frac{2}{ 3}n^2(3m-n) $, dove \textit{n} e' 
-il numero delle colonne e \textit{m} il numero delle righe. 
+La complessita' e' di circa $ \frac{2}{ 3}n^2(3m-n) $, dove \textit{n} e'
+il numero delle colonne e \textit{m} il numero delle righe.
 \\
-Inoltre, e' stata utilizzata la definizione di matrice di Householder, 
+Inoltre, e' stata utilizzata la definizione di matrice di Householder,
 andando a fare direttamente il prodotto tra Q e b nel metodo \textit{QRsolve},
-cioe' il prodotto tra i vettori \textit{v} e \textit{x}, rispettivamente. 
+cioe' il prodotto tra i vettori \textit{v} e \textit{x}, rispettivamente.
 
 \section{Data la \textit{function} Matlab}
 \begin{lstlisting}[style=Matlab-editor]
@@ -728,11 +728,11 @@ cioe' il prodotto tra i vettori \textit{v} e \textit{x}, rispettivamente.
   b2 = sum(A2,2);
   return
 \end{lstlisting}
-  \textbf{che crea sistemi lineari casuali di dimensione \textit{n} con soluzione nota,}
-  $$ A_1x = b_1, A_2x = b_2, x = (1,..,1)^T \in \mathbb{R}^{\textit{n}}, $$
-  \textbf{risolvere, utilizzando la \textit{function} \textbf{mialu}, i sistemi lineari generati da
+\textbf{che crea sistemi lineari casuali di dimensione \textit{n} con soluzione nota,}
+$$ A_1x = b_1, A_2x = b_2, x = (1,..,1)^T \in \mathbb{R}^{\textit{n}}, $$
+\textbf{risolvere, utilizzando la \textit{function} \textbf{mialu}, i sistemi lineari generati da
   $ [A1,A2,b1,b2]=linsis(5)$}.
-  \textbf{Commentare l'accuratezza dei risultati ottenuti, dandone spiegazione esaustiva.}
+\textbf{Commentare l'accuratezza dei risultati ottenuti, dandone spiegazione esaustiva.}
 \\\\
 \textbf{Soluzione del primo sistema lineare:}
 \[
@@ -774,35 +774,35 @@ esso, risulta essere pari a: 9.99999589290263e+09.
   Commentare l'accuratezza
   dei risultati ottenuti, dandone spiegazione esaustiva.}
 
-  \textbf{Soluzione del primo sistema lineare:}
-  \[
-    x_1 =
-    \begin{bmatrix}
-      1.000000000000000 \\
-      1.000000000000000 \\
-      1.000000000000000 \\
-      1.000000000000000 \\
-      1.000000000000000
-    \end{bmatrix}
-  \]
-  \textbf{Soluzione del secondo sistema lineare:}
-  \[
-    x_2 =
-    \begin{bmatrix}
-      1.000000078440239 \\
-      1.000000087208138 \\
-      1.000000012226079 \\
-      1.000000087938305 \\
-      1.000000060882494
-    \end{bmatrix}
-  \]
+\textbf{Soluzione del primo sistema lineare:}
+\[
+  x_1 =
+  \begin{bmatrix}
+    1.000000000000000 \\
+    1.000000000000000 \\
+    1.000000000000000 \\
+    1.000000000000000 \\
+    1.000000000000000
+  \end{bmatrix}
+\]
+\textbf{Soluzione del secondo sistema lineare:}
+\[
+  x_2 =
+  \begin{bmatrix}
+    1.000000078440239 \\
+    1.000000087208138 \\
+    1.000000012226079 \\
+    1.000000087938305 \\
+    1.000000060882494
+  \end{bmatrix}
+\]
 
 Nel primo caso e' possibile notare che i valori restituiti sono tutti uguali a 1,
 e questo e' dovuto anche al fatto che il numero di condizionamento del sistema
 era basso (2.5).
 \\
 Non e' possibile dire lo stesso per la seconda soluzione, la quale ha dei valori
-diversi dal primo, dovuto al fatto che vi e' un numero di condizionamento 
+diversi dal primo, dovuto al fatto che vi e' un numero di condizionamento
 molto elevato del sistema (99999995645.80569).
 
 \section{Utilizzare la \textit{function} \textbf{miaqr} per risolvere, nel senso dei
@@ -815,54 +815,54 @@ molto elevato del sistema (99999995645.80569).
   $$ \textbf{D1 = diag(pi*[1 1 1 1 1]).} $$
   Calcolare le corrispondenti soluzioni e residui, e commentare i risultati ottenuti.}
 
-   \textbf{Soluzione del sistema lineare Ax = b:}
-  \[
-    x_1 =
-    \begin{bmatrix}
-      3.000000000000008 \\
-      5.800000000000001 \\
-    -2.5000000000000009 
-    \end{bmatrix},
-    \\
-    \textit{nr} = 1.264911064067357
-  \]
+\textbf{Soluzione del sistema lineare Ax = b:}
+\[
+  x_1 =
+  \begin{bmatrix}
+    3.000000000000008 \\
+    5.800000000000001 \\
+    -2.5000000000000009
+  \end{bmatrix},
   \\
-  I valori ritornati risultano essere una buona soluzione, nonostante vi sia 
-  una minima inaccuratezza, sempre dovuta alla rappresentazione dei 
-  numeri reali non di macchina.
-  \\\\
-  \textbf{Soluzione del sistema lineare (D*A)x = (D*b):}
-  \[
-    x_2 =
-    \begin{bmatrix}
-     -0.602569986232221 \\
-      4.701698026617711 \\
-      1.758375401560359
-    \end{bmatrix},
-    \\
-    \textit{nr} = 3.735151112342432
-  \]
+  \textit{nr} = 1.264911064067357
+\]
+\\
+I valori ritornati risultano essere una buona soluzione, nonostante vi sia
+una minima inaccuratezza, sempre dovuta alla rappresentazione dei
+numeri reali non di macchina.
+\\\\
+\textbf{Soluzione del sistema lineare (D*A)x = (D*b):}
+\[
+  x_2 =
+  \begin{bmatrix}
+    -0.602569986232221 \\
+    4.701698026617711  \\
+    1.758375401560359
+  \end{bmatrix},
   \\
-  In questo caso la norma euclidea risulta essere diversa da quella del primo
-  sistema lineare. Inoltre, i valori della soluzione, confrontati
-  con quelli ottenuti con l'operatore $ \backslash $ di Matlab, risultano
-  essere diversi.
-  \\\\
-  \textbf{Soluzione del sistema lineare (D1*A)x = (D1*b):}
-  \[
-    x_3 =
-    \begin{bmatrix}
-     3.000000000000010 \\
-     5.800000000000003 \\
-   -2.5000000000000013 
-    \end{bmatrix},
-    \\
-    \textit{nr} = 3.973835306318445
-  \]
+  \textit{nr} = 3.735151112342432
+\]
+\\
+In questo caso la norma euclidea risulta essere diversa da quella del primo
+sistema lineare. Inoltre, i valori della soluzione, confrontati
+con quelli ottenuti con l'operatore $ \backslash $ di Matlab, risultano
+essere diversi.
+\\\\
+\textbf{Soluzione del sistema lineare (D1*A)x = (D1*b):}
+\[
+  x_3 =
+  \begin{bmatrix}
+    3.000000000000010 \\
+    5.800000000000003 \\
+    -2.5000000000000013
+  \end{bmatrix},
   \\
-  In quest'ultimo caso, i valori della soluzione si discostano di un non nulla
-  da quelli del primo sistema, mentre la norma euclidea risulta essere poco
-  piu' che triplicata.
+  \textit{nr} = 3.973835306318445
+\]
+\\
+In quest'ultimo caso, i valori della soluzione si discostano di un non nulla
+da quelli del primo sistema, mentre la norma euclidea risulta essere poco
+piu' che triplicata.
 
 \section{Scrivere una \textit{function} Matlab
   $$ \textbf{[x,nit] = newton(fun,jacobian,x0,tol,maxit)} $$
@@ -873,8 +873,8 @@ molto elevato del sistema (99999995645.80569).
   Prevedere opportuni valori di \textit{default} per gli ultimi due parametri
   di ingresso.}
 \begin{lstlisting}[style=Matlab-editor]
-  function [x, nit] = newton_j(fun, jacobian, x0, tol, maxit)
-  %[x, nit] = newton_j(fun, jacobian, x0, tol, maxit)
+  function [x, nit] = newton(fun, jacobian, x0, tol, maxit)
+  %[x, nit] = newton(fun, jacobian, x0, tol, maxit)
   %Input: 
   %fun = Vettore di funzioni nonlineari di cui vogliamo trovare le radici.
   %jacobian = Matrice di funzioni contenenti il giacobiano di fun. 
@@ -937,114 +937,118 @@ del punto stazionario della funzione:
 \]
 utilizzando tolleranze \textbf{tol = 1e-3, 1e-8, 1e-13.} Graficare la soluzione e tabulare in modo conveniente i risultati ottenuti.
 }
-DA FINIRE
+
+Di seguito viene riportata la tabella contenente tutte le
+soluzioni calcolate dalla \textit{function} newton,
+dell'esercizio 14, per ogni tolleranza richiesta.
+
 \begin{center}
-  \begin{longtable}{ |p{2.8cm}||p{2.8cm}|p{2.8cm}| }
+  \begin{longtable}{ |p{2.8cm}|p{2.8cm}|p{2.8cm}| }
     \hline
     \multicolumn{3}{|c|}{ \textbf{Dati - Tabella di confronto}} \\
     \hline
-    \textbf{1e-3} & \textbf{1e-8} & \textbf{1e-13}      \\
+    \textbf{1e-3}     & \textbf{1e-8}     & \textbf{1e-13}      \\
     \hline
-    25.2343922260256 & 25.2244798518307 & 25.2244799411408 \\
-    0.504687844520529 & 0.504489597036618 & 0.504489598822834 \\
-    24.7297043815051 & 24.7199902547941 & 24.7199903423179 \\
-    1.00937568904105 & 1.00897919407324 & 1.00897919764566 \\
-    24.2250165369846 & 24.2155006577574 & 24.2155007434951 \\
-    1.51406353356157 & 1.51346879110985 & 1.51346879646848 \\
-    23.7203286924641 & 23.7110110607208 & 23.7110111446723 \\
-    2.01875137808208 & 2.01795838814646 & 2.0179583952913 \\
-    23.2156408479435 & 23.2065214636842 & 23.2065215458495 \\
-    2.52343922260261 & 2.52244798518307 & 2.52244799411411 \\
-    22.710953003423 & 22.7020318666476 & 22.7020319470267 \\
-    3.02812706712314 & 3.02693758221969 & 3.02693759293693 \\
-    22.2062651589025 & 22.197542269611 & 22.1975423482038 \\
-    3.53281491164366 & 3.5314271792563 & 3.53142719175975 \\
-    21.701577314382 & 21.6930526725744 & 21.693052749381 \\
-    4.03750275616417 & 4.0359167762929 & 4.03591679058257 \\
-    21.1968894698615 & 21.1885630755378 & 21.1885631505582 \\
-    4.54219060068469 & 4.54040637332951 & 4.54040638940539 \\
-    20.6922016253409 & 20.6840734785012 & 20.6840735517354 \\
-    5.04687844520521 & 5.0448959703661 & 5.0448959882282 \\
-    20.1875137808204 & 20.1795838814646 & 20.1795839529126 \\
-    5.55156628972573 & 5.5493855674027 & 5.54938558705101 \\
-    19.6828259362999 & 19.675094284428 & 19.6750943540898 \\
-    6.05625413424626 & 6.05387516443928 & 6.05387518587381 \\
-    19.1781380917794 & 19.1706046873914 & 19.170604755267 \\
-    6.5609419787668 & 6.55836476147585 & 6.55836478469661 \\
-    18.6734502472588 & 18.6661150903549 & 18.6661151564442 \\
-    7.06562982328733 & 7.06285435851243 & 7.06285438351942 \\
-    18.1687624027383 & 18.1616254933183 & 18.1616255576213 \\
-    7.57031766780787 & 7.56734395554901 & 7.56734398234223 \\
-    17.6640745582177 & 17.6571358962817 & 17.6571359587985 \\
-    8.07500551232842 & 8.0718335525856 & 8.07183358116504 \\
-    17.1593867136972 & 17.1526462992451 & 17.1526463599757 \\
-    8.57969335684898 & 8.57632314962219 & 8.57632317998784 \\
-    16.6546988691766 & 16.6481567022085 & 16.6481567611529 \\
-    9.08438120136955 & 9.08081274665879 & 9.08081277881065 \\
-    16.1500110246561 & 16.1436671051719 & 16.1436671623301 \\
-    9.5890690458901 & 9.58530234369538 & 9.58530237763345 \\
-    15.6453231801355 & 15.6391775081353 & 15.6391775635073 \\
-    10.0937568904106 & 10.089791940732 & 10.0897919764563 \\
-    15.140635335615 & 15.1346879110987 & 15.1346879646845 \\
-    10.5984447349312 & 10.5942815377686 & 10.5942815752791 \\
-    14.6359474910944 & 14.6301983140621 & 14.6301983658617 \\
-    11.1031325794518 & 11.0987711348052 & 11.0987711741019 \\
-    14.1312596465739 & 14.1257087170255 & 14.1257087670389 \\
-    11.6078204239723 & 11.6032607318418 & 11.6032607729247 \\
-    13.6265718020533 & 13.6212191199889 & 13.6212191682161 \\
-    12.1125082684928 & 12.1077503288784 & 12.1077503717475 \\
-    13.1218839575328 & 13.1167295229523 & 13.1167295693932 \\
-    12.6171961130134 & 12.612239925915 & 12.6122399705703 \\
-    12.6171961130122 & 12.6122399259157 & 12.6122399705704 \\
-    13.1218839575339 & 13.1167295229516 & 13.1167295693932 \\
-    12.1125082684917 & 12.1077503288791 & 12.1077503717476 \\
-    13.6265718020544 & 13.6212191199882 & 13.621219168216 \\
-    11.6078204239712 & 11.6032607318424 & 11.6032607729248 \\
-    14.1312596465749 & 14.1257087170249 & 14.1257087670388 \\
-    11.1031325794507 & 11.0987711348058 & 11.098771174102 \\
-    14.6359474910955 & 14.6301983140615 & 14.6301983658616 \\
-    10.5984447349301 & 10.5942815377692 & 10.5942815752792 \\
-    15.140635335616 & 15.1346879110981 & 15.1346879646844 \\
-    10.0937568904096 & 10.0897919407326 & 10.0897919764564 \\
-    15.6453231801365 & 15.6391775081348 & 15.6391775635072 \\
-    9.58906904588911 & 9.58530234369591 & 9.5853023776336 \\
-    16.150011024657 & 16.1436671051714 & 16.14366716233 \\
-    9.08438120136859 & 9.08081274665927 & 9.0808127788108 \\
-    16.6546988691776 & 16.648156702208 & 16.6481567611528 \\
-    8.57969335684807 & 8.57632314962262 & 8.57632317998801 \\
-    17.1593867136981 & 17.1526462992447 & 17.1526463599756 \\
-    8.07500551232755 & 8.07183355258598 & 8.0718335811652 \\
-    17.6640745582186 & 17.6571358962813 & 17.6571359587984 \\
-    7.57031766780704 & 7.56734395554934 & 7.5673439823424 \\
-    18.1687624027391 & 18.161625493318 & 18.1616255576212 \\
-    7.06562982328653 & 7.06285435851271 & 7.06285438351959 \\
-    18.6734502472596 & 18.6661150903546 & 18.666115156444 \\
-    6.56094197876603 & 6.55836476147608 & 6.55836478469678 \\
-    19.1781380917801 & 19.1706046873912 & 19.1706047552668 \\
-    6.05625413424553 & 6.05387516443945 & 6.05387518587398 \\
-    19.6828259363006 & 19.6750942844279 & 19.6750943540896 \\
-    5.55156628972503 & 5.54938556740281 & 5.54938558705117 \\
-    20.1875137808211 & 20.1795838814645 & 20.1795839529124 \\
-    5.04687844520454 & 5.04489597036618 & 5.04489598822836 \\
-    20.6922016253416 & 20.6840734785011 & 20.6840735517352 \\
-    4.54219060068406 & 4.54040637332955 & 4.54040638940555 \\
-    21.1968894698621 & 21.1885630755378 & 21.188563150558 \\
-    4.03750275616359 & 4.03591677629294 & 4.03591679058273 \\
-    21.7015773143825 & 21.6930526725744 & 21.6930527493808 \\
-    3.53281491164313 & 3.53142717925633 & 3.53142719175991 \\
-    22.206265158903 & 22.197542269611 & 22.1975423482037 \\
-    3.02812706712267 & 3.02693758221971 & 3.02693759293708 \\
-    22.7109530034234 & 22.7020318666476 & 22.7020319470265 \\
-    2.52343922260221 & 2.52244798518309 & 2.52244799411425 \\
-    23.2156408479439 & 23.2065214636842 & 23.2065215458493 \\
-    2.01875137808175 & 2.01795838814648 & 2.01795839529141 \\
-    23.7203286924644 & 23.7110110607208 & 23.7110111446722 \\
-    1.51406353356131 & 1.51346879110986 & 1.51346879646857 \\
-    24.2250165369848 & 24.2155006577574 & 24.215500743495 \\
-    1.00937568904087 & 1.00897919407324 & 1.00897919764573 \\
-    24.7297043815052 & 24.7199902547941 & 24.7199903423179 \\
-    0.504687844520431 & 0.50448959703662 & 0.504489598822864 \\
-    25.2343922260257 & 25.2244798518307 & 25.224479941140 \\
+    25.2343922260256  & 25.2244798518307  & 25.2244799411408    \\
+    0.504687844520529 & 0.504489597036618 & 0.504489598822834   \\
+    24.7297043815051  & 24.7199902547941  & 24.7199903423179    \\
+    1.00937568904105  & 1.00897919407324  & 1.00897919764566    \\
+    24.2250165369846  & 24.2155006577574  & 24.2155007434951    \\
+    1.51406353356157  & 1.51346879110985  & 1.51346879646848    \\
+    23.7203286924641  & 23.7110110607208  & 23.7110111446723    \\
+    2.01875137808208  & 2.01795838814646  & 2.0179583952913     \\
+    23.2156408479435  & 23.2065214636842  & 23.2065215458495    \\
+    2.52343922260261  & 2.52244798518307  & 2.52244799411411    \\
+    22.710953003423   & 22.7020318666476  & 22.7020319470267    \\
+    3.02812706712314  & 3.02693758221969  & 3.02693759293693    \\
+    22.2062651589025  & 22.197542269611   & 22.1975423482038    \\
+    3.53281491164366  & 3.5314271792563   & 3.53142719175975    \\
+    21.701577314382   & 21.6930526725744  & 21.693052749381     \\
+    4.03750275616417  & 4.0359167762929   & 4.03591679058257    \\
+    21.1968894698615  & 21.1885630755378  & 21.1885631505582    \\
+    4.54219060068469  & 4.54040637332951  & 4.54040638940539    \\
+    20.6922016253409  & 20.6840734785012  & 20.6840735517354    \\
+    5.04687844520521  & 5.0448959703661   & 5.0448959882282     \\
+    20.1875137808204  & 20.1795838814646  & 20.1795839529126    \\
+    5.55156628972573  & 5.5493855674027   & 5.54938558705101    \\
+    19.6828259362999  & 19.675094284428   & 19.6750943540898    \\
+    6.05625413424626  & 6.05387516443928  & 6.05387518587381    \\
+    19.1781380917794  & 19.1706046873914  & 19.170604755267     \\
+    6.5609419787668   & 6.55836476147585  & 6.55836478469661    \\
+    18.6734502472588  & 18.6661150903549  & 18.6661151564442    \\
+    7.06562982328733  & 7.06285435851243  & 7.06285438351942    \\
+    18.1687624027383  & 18.1616254933183  & 18.1616255576213    \\
+    7.57031766780787  & 7.56734395554901  & 7.56734398234223    \\
+    17.6640745582177  & 17.6571358962817  & 17.6571359587985    \\
+    8.07500551232842  & 8.0718335525856   & 8.07183358116504    \\
+    17.1593867136972  & 17.1526462992451  & 17.1526463599757    \\
+    8.57969335684898  & 8.57632314962219  & 8.57632317998784    \\
+    16.6546988691766  & 16.6481567022085  & 16.6481567611529    \\
+    9.08438120136955  & 9.08081274665879  & 9.08081277881065    \\
+    16.1500110246561  & 16.1436671051719  & 16.1436671623301    \\
+    9.5890690458901   & 9.58530234369538  & 9.58530237763345    \\
+    15.6453231801355  & 15.6391775081353  & 15.6391775635073    \\
+    10.0937568904106  & 10.089791940732   & 10.0897919764563    \\
+    15.140635335615   & 15.1346879110987  & 15.1346879646845    \\
+    10.5984447349312  & 10.5942815377686  & 10.5942815752791    \\
+    14.6359474910944  & 14.6301983140621  & 14.6301983658617    \\
+    11.1031325794518  & 11.0987711348052  & 11.0987711741019    \\
+    14.1312596465739  & 14.1257087170255  & 14.1257087670389    \\
+    11.6078204239723  & 11.6032607318418  & 11.6032607729247    \\
+    13.6265718020533  & 13.6212191199889  & 13.6212191682161    \\
+    12.1125082684928  & 12.1077503288784  & 12.1077503717475    \\
+    13.1218839575328  & 13.1167295229523  & 13.1167295693932    \\
+    12.6171961130134  & 12.612239925915   & 12.6122399705703    \\
+    12.6171961130122  & 12.6122399259157  & 12.6122399705704    \\
+    13.1218839575339  & 13.1167295229516  & 13.1167295693932    \\
+    12.1125082684917  & 12.1077503288791  & 12.1077503717476    \\
+    13.6265718020544  & 13.6212191199882  & 13.621219168216     \\
+    11.6078204239712  & 11.6032607318424  & 11.6032607729248    \\
+    14.1312596465749  & 14.1257087170249  & 14.1257087670388    \\
+    11.1031325794507  & 11.0987711348058  & 11.098771174102     \\
+    14.6359474910955  & 14.6301983140615  & 14.6301983658616    \\
+    10.5984447349301  & 10.5942815377692  & 10.5942815752792    \\
+    15.140635335616   & 15.1346879110981  & 15.1346879646844    \\
+    10.0937568904096  & 10.0897919407326  & 10.0897919764564    \\
+    15.6453231801365  & 15.6391775081348  & 15.6391775635072    \\
+    9.58906904588911  & 9.58530234369591  & 9.5853023776336     \\
+    16.150011024657   & 16.1436671051714  & 16.14366716233      \\
+    9.08438120136859  & 9.08081274665927  & 9.0808127788108     \\
+    16.6546988691776  & 16.648156702208   & 16.6481567611528    \\
+    8.57969335684807  & 8.57632314962262  & 8.57632317998801    \\
+    17.1593867136981  & 17.1526462992447  & 17.1526463599756    \\
+    8.07500551232755  & 8.07183355258598  & 8.0718335811652     \\
+    17.6640745582186  & 17.6571358962813  & 17.6571359587984    \\
+    7.57031766780704  & 7.56734395554934  & 7.5673439823424     \\
+    18.1687624027391  & 18.161625493318   & 18.1616255576212    \\
+    7.06562982328653  & 7.06285435851271  & 7.06285438351959    \\
+    18.6734502472596  & 18.6661150903546  & 18.666115156444     \\
+    6.56094197876603  & 6.55836476147608  & 6.55836478469678    \\
+    19.1781380917801  & 19.1706046873912  & 19.1706047552668    \\
+    6.05625413424553  & 6.05387516443945  & 6.05387518587398    \\
+    19.6828259363006  & 19.6750942844279  & 19.6750943540896    \\
+    5.55156628972503  & 5.54938556740281  & 5.54938558705117    \\
+    20.1875137808211  & 20.1795838814645  & 20.1795839529124    \\
+    5.04687844520454  & 5.04489597036618  & 5.04489598822836    \\
+    20.6922016253416  & 20.6840734785011  & 20.6840735517352    \\
+    4.54219060068406  & 4.54040637332955  & 4.54040638940555    \\
+    21.1968894698621  & 21.1885630755378  & 21.188563150558     \\
+    4.03750275616359  & 4.03591677629294  & 4.03591679058273    \\
+    21.7015773143825  & 21.6930526725744  & 21.6930527493808    \\
+    3.53281491164313  & 3.53142717925633  & 3.53142719175991    \\
+    22.206265158903   & 22.197542269611   & 22.1975423482037    \\
+    3.02812706712267  & 3.02693758221971  & 3.02693759293708    \\
+    22.7109530034234  & 22.7020318666476  & 22.7020319470265    \\
+    2.52343922260221  & 2.52244798518309  & 2.52244799411425    \\
+    23.2156408479439  & 23.2065214636842  & 23.2065215458493    \\
+    2.01875137808175  & 2.01795838814648  & 2.01795839529141    \\
+    23.7203286924644  & 23.7110110607208  & 23.7110111446722    \\
+    1.51406353356131  & 1.51346879110986  & 1.51346879646857    \\
+    24.2250165369848  & 24.2155006577574  & 24.215500743495     \\
+    1.00937568904087  & 1.00897919407324  & 1.00897919764573    \\
+    24.7297043815052  & 24.7199902547941  & 24.7199903423179    \\
+    0.504687844520431 & 0.50448959703662  & 0.504489598822864   \\
+    25.2343922260257  & 25.2244798518307  & 25.224479941140     \\
     \hline
   \end{longtable}
 \end{center}
@@ -1054,63 +1058,230 @@ DA FINIRE
   Costruire una function, \textbf{lagrange.m}, avente la \underline{stessa sintassi} della function spline
   di Matlab, che implementi, in modo \underline{vettoriale}, la forma di Lagrange del polinomio interpolante una
   funzione.
-  \textbf{N.B.:} il risultato dovr`a avere \underline{le stesse dimensioni} del dato di ingresso; questo vale anche per gli
+  \\
+  \textbf{N.B.:} il risultato dovra' avere \underline{le stesse dimensioni} del dato di ingresso; questo vale anche per gli
   esercizi a seguire.
-}
-DA FINIRE
+ }
+
+\begin{lstlisting}[style=Matlab-editor]
+  function s = lagrange(x, y, xq)
+  %s = lagrange(x, y, xq)
+  %Input:
+  %x = Vettore contenete le ascisse d'interpolazione.
+  %y = Vettore contenete i valori della funzione nelle ascisse d'interpolazione.
+  %xq = Vettore contenente le ascisse in cui vogliamo approssimare la funzione.
+  %Output:
+  %s = Valori approssimati della funzione.
+  %Calcola i valori approssimati della funzione, ottenuti mediante il polinomio interpolante, in forma di Lagrange, nelle ascisse xq.
+  
+  if(length(x) ~= length(unique(x))), error("Le ascisse d'interpolazione non sono distinte tra loro." + newline + "Riprovare."),end 
+  if(length(x) ~= length(y)), error("Il numero delle ascisse d'interpolazione e quello dei valori della funzione non corrisponde." + newline + "Riprovare."),end
+  if(isempty(xq)), error("Il vettore contenente le ascisse in cui interpolare la funzione e' vuoto." + newline + "Riprovare."),end
+  if(size(x,2) > 1 || size(Y,2) > 1 || size(xq,2) > 1),error("Non sono stati inseriti correttamente i vettori colonna." + newline + "Riprovare."),end
+   
+  n = size(x, 1);
+  Lin = ones(size(xq, 1), n);
+  %Calcolo la produttoria Lin(x)
+  for i = 1 : n
+      for j = 1 : n
+          if (i~=j)
+              Lin(:,i)=Lin(:,i).*((xq-x(j))/(x(i)-x(j)));
+          end
+      end
+  end
+  s = zeros(size(xq));
+  %Calcolo la sommatoria fi*Lin(x)
+  for i=1:n
+      s = s+y(i).*Lin(:,i);
+  end
+  end
+\end{lstlisting}
+
+Per creare questa \textit{function} si e' andati, inizialmente, a calcolare la 
+produttoria \[ Lin(x) = \prod_{j = 0, j != i}^{n} \frac{x - x_j}{x_i - x_j} \]
+e successivamente la sommatoria \[ p(x) = \sum_{i = 0}^{n} f_i * L_{in}(x). \]
 
 \section{
   Costruire una function, \textbf{newton.m}, avente la \underline{stessa sintassi} della function \textbf{spline}
-di Matlab, che implementi, in modo \underline{vettoriale}, la forma di Newton del polinomio interpolante una
-funzione.
-}
-DA FINIRE
+  di Matlab, che implementi, in modo \underline{vettoriale}, la forma di Newton del polinomio interpolante una
+  funzione.
+ }
+ \begin{lstlisting}[style=Matlab-editor]
+function s = newton(x, y, xq)
+%s = newton(x, y, xq)
+%Input:
+%x = Vettore colonna contenete le ascisse d'interpolazione.
+%y = Vettore colonna contenete i valori della funzione nelle ascisse d'interpolazione.
+%xq = Vettore contente le ascisse in cui vogliamo approssimare la funzione.
+%Output:
+%s = Valori approssimati della funzione.
+%Calcola i valori approssimati della funzione, ottenuti attraverso il polinomio interpolante in forma di Newton nelle ascisse xq.
+
+if(length(x) ~= length(unique(x))), error("Le ascisse d'interpolazione non sono distinte tra loro." + newline + "Riprovare."),end 
+if(length(x) ~= length(y)), error("Il numero delle ascisse d'interpolazione e quello dei valori della funzione non corrisponde." + newline + "Riprovare."),end
+if(isempty(xq)), error("Il vettore contenente le ascisse in cui interpolare la funzione e' vuoto." + newline + "Riprovare."),end
+if(size(x,2) > 1 || size(Y,2) > 1 || size(xq,2) > 1),error("Non sono stati inseriti correttamente i vettori colonna." + newline + "Riprovare."),end
+
+diff_divise = differenze_divise(x, y);
+n = length(diff_divise) - 1;
+s = diff_divise(n+1) * ones(size(xq));
+
+%Uso l'algoritmo di Horner per ridurre il numero di operazioni
+for i=n:-1:1
+    s = s.*(xq-x(i)) + diff_divise(i);  
+end
+return;
+end
+
+function diff_divise = differenze_divise(x, f)
+%Calcola le differenze divise
+n = size(x);
+if(n ~= length(f)), error("La dimensione di x e quella di f non coincidono." + newline + "Riprovare."), end
+diff_divise = f;
+n = n-1;
+for i = 1 : n
+    for j = n + 1 : -1 : i + 1
+        diff_divise(j) = (diff_divise(j) - diff_divise(j-1))/(x(j) - x(j-i));
+    end
+end
+return;
+end
+\end{lstlisting}
+
+Per creare questa \textit{function} si e' andati, inizialmente, a calcolare il
+vettore delle differenze divise, implementato nella \textit{function differenze\_divise}, e
+successivamente si e' andati ad utilizzare l'algoritmo di Horner, per ridurre
+il numero di operazioni, per calcolare i valori del polinomio nelle ascisse \textit{xq}.
+
 
 \section{
   Costruire una function, \textbf{hermite.m}, avente sintassi
   $$ yy = hermite( xi, fi, f1i, xx) $$
   che implementi, in modo \underline{vettoriale}, il polinomio interpolante di Hermite.
-}
-DA FINIRE
+ }
+\begin{lstlisting}[style=Matlab-editor]
+  function yy = hermite(xi, fi, f1i, xx)
+  % 
+  % yy = hermite(xi, fi, f1i, xx)
+  %
+  %Input:
+  %xi = Vettore colonna contenente le ascisse d'interpolazione.
+  %fi = Vettore colonna contenente i valori della funzione nelle ascisse d'interpolazione.
+  %f1i = Vettore colonna contenente i valori della derivata prima, che assume nelle ascisse d'interpolazione.
+  %xx = Vettore contenente le ascisse in cui vogliamo approssimare la funzione.
+  %Output:
+  %yy = Valori approssimati della funzione con il polinomio interpolante di hermite.
+  %Calcola i valori approssimati della funzione, calcolati attraverso il polinomio interpolante in forma di Lagrange nelle ascisse xx.
+  
+  if(length(xi) ~= length(unique(xi))), error("Le ascisse d'interpolazione non sono distinte tra loro." + newline + "Riprovare."),end 
+  if(length(xi) ~= length(fi)), error("Il numero delle ascisse d'interpolazione e quello dei valori della funzione non corrisponde." + newline + "Riprovare."),end
+  if(isempty(xx)), error("Il vettore xx non contiene alcuna ascissa." + newline + "Riprovare."), end  
+  if(length(fi) ~= length(f1i)), error("La lunghezza di fi non corrisponde a quella di f1i." + newline + "Riprovare."),end
+  if(size(xi,2)>1 || size(fi,2)>1 || size(f1i,2)>1), error("Non sono stati inseriti correttamente i vettori colonna." + newline + "Riprovare."),end
+  
+  n = (length(xi));
+  fi(1:2:2*n-1) = fi;
+  fi(2:2:2*n) = f1i;
+  
+  diff_divise = differenze_divise(xi, fi');
+    
+  n = length(diff_divise)-1;
+  yy = diff_divise(n+1)*ones(size(xx));    
+  %Uso l'algoritmo di Horner per ridurre il numero di operazioni
+  for i = n:-1:1
+      yy = yy.*(xx-xi(ceil(i/2)))+diff_divise(i);
+  end
+  return;
+  end
+    
+  function f = differenze_divise(x, f)
+  %Calcola le differenze divise
+  n = (length(f)/2)-1;
+  
+  for i = 2*n+1:-2:3
+      f(i) = (f(i)-f(i-2))/(x(ceil(i/2))-x(ceil((i-1)/2)));
+  end
+  for j = 2:2*n+1
+      for i = (2*n+2):-1:j+1
+          f(i) = (f(i)-f(i-1))/(x(ceil(i/2))-x(ceil((i-j)/2)));
+      end
+  end
+  return;
+  end
+\end{lstlisting}
+
+Simile alla \textit{function} precedente, solamente che qui si sono utilizzate
+anche le derivate prime della funzione che deve essere interpolata.
+
 
 \section{
-  Costruire una function Matlab che, specificato in ingresso il grado n del polinomio
-  interpolante, e gli estremi dell'intervallo [a, b], calcoli le corrispondenti ascisse di Chebyshev.
+Costruire una function Matlab che, specificato in ingresso il grado n del polinomio
+interpolante, e gli estremi dell'intervallo [a, b], calcoli le corrispondenti ascisse di Chebyshev.
 }
-DA FINIRE 
+\begin{lstlisting}[style=Matlab-editor]
+  function x = chebyshev(n, a, b)
+%x = chebyshev(n, a, b)
+%Input:
+%n = Grado del polinomio
+%a, b = Estremi dell'intervallo.
+%Output:
+%x = Ascisse di Chebyshev.
+%Calcola le ascisse di Chebyshev.
+if nargin < 3
+    error("Il numero degli argomenti e' errato." + newline + "Riprovare.");
+elseif n <= 0 || n ~= fix(n)
+        error("Il grado del polinomio deve essere positivo." + newline + "Riprovare.");
+elseif a >= b
+        error("L'intervallo e' stato inserito in maniera non corretta." + newline + "Riprovare.");
+end
+
+x = cos(((2*(0:n) + 1)*pi)/(2*(n+1))); %Ascisse su [-1,1]
+x = (a+b)/2 + (b-a)/2*x;
+
+return;
+end
+\end{lstlisting}
+
+Per creare questa \textit{function} si e' andati, inizialmente, a calcolare le ascisse
+di Chebyshev nell'intervallo $ [-1, 1] $ utilizzando la seguente formula: 
+\[ x_i = \cos \left( \frac{2i + 1}{2(n+1)} \pi \right) \]
+e successivamente si e' andati a riportarle per il generico intervallo $ [a, b] $, 
+mediante la formula:
+\[ x_{n-i} = \frac{a + b}{2} + \frac{b - a}{2} * \cos \left( \frac{2i + 1}{2(n+1)} \pi \right) \]
+per i che va da 0 ad \textit{n}, dove \textit{n} e' il grado del polinomio.
 
 \section{
   Costruire una function Matlab, con sintassi
- $$ ll = lebesgue( a, b, nn, type ), $$
-che approssimi la costante di Lebesgue per l'interpolazione polinomiale sull'intervallo \textbf{[a,b]}, per
-i polinomi di grado specificato nel vettore \textbf{nn}, utilizzando ascisse equidistanti, se \textbf{type=0}, o di
-Chebyshev, se \textbf{type=1} (utilizzare 10001 punti equispaziati nell'intervallo \textbf{[a,b]} per ottenere cia-
-scuna componente di ll). Graficare i risultati ottenuti, per \textbf{nn=1:100}, utilizzando \textbf{[a,b]=[0,1]} e
-\textbf{[a,b]=[-3,7]}. Giustificare i risultati ottenuti.
-}
+  $$ ll = lebesgue( a, b, nn, type ), $$
+  che approssimi la costante di Lebesgue per l'interpolazione polinomiale sull'intervallo \textbf{[a,b]}, per
+  i polinomi di grado specificato nel vettore \textbf{nn}, utilizzando ascisse equidistanti, se \textbf{type=0}, o di
+  Chebyshev, se \textbf{type=1} (utilizzare 10001 punti equispaziati nell'intervallo \textbf{[a,b]} per ottenere cia-
+  scuna componente di ll). Graficare i risultati ottenuti, per \textbf{nn=1:100}, utilizzando \textbf{[a,b]=[0,1]} e
+  \textbf{[a,b]=[-3,7]}. Giustificare i risultati ottenuti.
+ }
 DA FINIRE
 
 \section{
   Utilizzando le function dei precedenti esercizi, graficare (in semilogy) l'andamento
-errore di interpolazione (utilizzare 10001 punti equispaziati nell'intervallo per ottenerne la stima)
-per la funzione di Runge,
-$$ f(x) = \frac{1}{1+x^2}, x\in[-5,5], $$
-utilizzando sia le ascisse equidistanti che di Chebyshev, per i polinomi interpolanti di grado \textbf{nn=2:2:100}.
-Graficare l'errore di interpolazione anche per i polinomi interpolanti di Hermite di grado \textbf{nn=3:2:99},
-sia utilizzando ascisse equidistanti che ascisse di Chebyshev, nell'intervallo considerato.
-}
+  errore di interpolazione (utilizzare 10001 punti equispaziati nell'intervallo per ottenerne la stima)
+  per la funzione di Runge,
+  $$ f(x) = \frac{1}{1+x^2}, x\in[-5,5], $$
+  utilizzando sia le ascisse equidistanti che di Chebyshev, per i polinomi interpolanti di grado \textbf{nn=2:2:100}.
+  Graficare l'errore di interpolazione anche per i polinomi interpolanti di Hermite di grado \textbf{nn=3:2:99},
+  sia utilizzando ascisse equidistanti che ascisse di Chebyshev, nell'intervallo considerato.
+ }
 DA FINIRE
 
 \section{
   Costruire una function, \textbf{myspline.m}, avente sintassi
-$$ yy = myspline( xi, fi, xx, type ) $$
-dove \textbf{type=0} calcola la \textit{spline} cubica interpolante naturale i punti \textbf{(xi,fi)}, e \textbf{type~=0} calcola quella
-\textit{not-a-knot} (default).
-}
+  $$ yy = myspline( xi, fi, xx, type ) $$
+  dove \textbf{type=0} calcola la \textit{spline} cubica interpolante naturale i punti \textbf{(xi,fi)}, e \textbf{type~=0} calcola quella
+  \textit{not-a-knot} (default).
+ }
 DA FINIRE
 
 \section{
-  Graficare, utilizzando il formato semilogy, l'errore di approssimazione utilizzando le
+Graficare, utilizzando il formato semilogy, l'errore di approssimazione utilizzando le
 \textit{spline} interpolanti naturale e \textit{not-a-knot} per approssimare la funzione di Runge sull'intervallo $ [-5,5] $,
 utilizzando una partizione $ \delta = {-5 = x_0 < \cdots < x_n = 5} $, con ascisse equidistanti e \textbf{n=4:4:400}.
 \\
@@ -1120,75 +1291,75 @@ DA FINIRE
 
 \section{
   E' noto che un fenomeno fisico evolve come $ y = x^n$, con \textit{n} incognito. Il file \textbf{data.mat},
-reperibile a:
-$$ https://drive.google.com/file/d/14u2Pjnl_BZN1GWEFCZd0tqKCObGGI-M5 $$
-$$ /view?usp=share_link $$
-contiene 1000 coppie di dati $ (x_i, y_i) $, in cui la seconda componente `e affetta da un errore con di-
-stribuzione Gaussiana a media nulla e varianza "piccola". Utilizzando un opportuno polinomio
-di approssimazione ai minimi quadrati, stimare il grado \textit{n}. Argomentare il procedimento seguito,
-graficando la norma del residuo rispetto a valori crescenti di n. `E richiesto il codice Matlab dell'al-
-goritmo che avrete implementato (potete utilizzare, se lo ritenete opportuno, la function \textbf{polyfit}
-di Matlab).
-}
+  reperibile a:
+  $$ https://drive.google.com/file/d/14u2Pjnl_BZN1GWEFCZd0tqKCObGGI-M5 $$
+  $$ /view?usp=share_link $$
+  contiene 1000 coppie di dati $ (x_i, y_i) $, in cui la seconda componente `e affetta da un errore con di-
+  stribuzione Gaussiana a media nulla e varianza "piccola". Utilizzando un opportuno polinomio
+  di approssimazione ai minimi quadrati, stimare il grado \textit{n}. Argomentare il procedimento seguito,
+  graficando la norma del residuo rispetto a valori crescenti di n. `E richiesto il codice Matlab dell'al-
+  goritmo che avrete implementato (potete utilizzare, se lo ritenete opportuno, la function \textbf{polyfit}
+  di Matlab).
+ }
 DA FINIRE
 
 \section{
   Costruire una function Matlab che, dato in input \textit{n}, restituisca i pesi della qua-
-dratura della formula di Newton-Cotes di grado \textit{n}. Tabulare, quindi, i pesi delle formule di grado
-1, 2,. . . , 7 e 9 (come \underline{numeri razionali}).
-}
+  dratura della formula di Newton-Cotes di grado \textit{n}. Tabulare, quindi, i pesi delle formule di grado
+  1, 2,. . . , 7 e 9 (come \underline{numeri razionali}).
+ }
 DA FINIRE
 
 \section{
   Scrivere una function Matlab,
-$$ [If,err] = composita( fun, a, b, k, n ) $$
-che implementi la formula composita di Newton-Cotes di grado \textbf{k} su \textbf{n+1} ascisse equidistanti, con \textbf{n}
-multiplo pari di \textbf{k}, in cui:
-\\
-\textbullet \textbf{fun} e' la funzione integranda (che accetta input vettoriali);
-\\
-\textbullet \textbf{[a,b]} e' l'intervallo di integrazione;
-\\
-\textbullet \textbf{k, n} come su descritti;
-\\
-\textbullet \textbf{If} e' l'approssimazione dell'integrale ottenuta;
-\\
-\textbullet \textbf{err} e' la stima dell'errore di quadratura.
-}
+  $$ [If,err] = composita( fun, a, b, k, n ) $$
+  che implementi la formula composita di Newton-Cotes di grado \textbf{k} su \textbf{n+1} ascisse equidistanti, con \textbf{n}
+  multiplo pari di \textbf{k}, in cui:
+  \\
+  \textbullet \textbf{fun} e' la funzione integranda (che accetta input vettoriali);
+  \\
+  \textbullet \textbf{[a,b]} e' l'intervallo di integrazione;
+  \\
+  \textbullet \textbf{k, n} come su descritti;
+  \\
+  \textbullet \textbf{If} e' l'approssimazione dell'integrale ottenuta;
+  \\
+  \textbullet \textbf{err} e' la stima dell'errore di quadratura.
+ }
 DA FINIRE
 
 \section{
-  Utilizzare la function \textbf{composita} per ottenere l'approssimazione dell'integrale
-  $$ 
-  \int_{0}^{1} 
-    (\sum_{i=1}^{5} i \cos 2 \pi ix - e^i \sin 2(\pi i + 0.1)x) 
-  \, dx  
-  $$
-  con le formule composite di Newton-Cotes di grado \textbf{k=1,2,3,4,5,6}. Per tutte, utilizzare \textbf{n=12}.
+Utilizzare la function \textbf{composita} per ottenere l'approssimazione dell'integrale
+$$
+  \int_{0}^{1}
+  (\sum_{i=1}^{5} i \cos 2 \pi ix - e^i \sin 2(\pi i + 0.1)x)
+  \, dx
+$$
+con le formule composite di Newton-Cotes di grado \textbf{k=1,2,3,4,5,6}. Per tutte, utilizzare \textbf{n=12}.
 }
 DA FINIRE
 
 \section{
   Implementare la formula composita adattativa di Simpson.
-}
+ }
 DA FINIRE
 
 \section{
   Implementare la formula composita adattativa di Newton-Cotes di grado \textbf{k=4}.
-}
+ }
 DA FINIRE
 
 \section{
   Confrontare le formule adattative degli ultimi due esercizi, tabulando il numero
-di valutazioni funzionali effettuate, rispetto alla tolleranza \textbf{tol = 1e-2, 1e-3, ..., 1e-9}, per
-ottenere l'approssimazione dell'integrale
-$$ 
-  \int_{10^{-5}}^{1} 
+  di valutazioni funzionali effettuate, rispetto alla tolleranza \textbf{tol = 1e-2, 1e-3, ..., 1e-9}, per
+  ottenere l'approssimazione dell'integrale
+  $$
+    \int_{10^{-5}}^{1}
     x^{-1} \cos(\log x^{-1})
-  \, dx \equiv \sin \log 10^5.
-$$
-Costruire un'altra tabella, in cui si tabula l'errore vero (essendo l'integrale noto, in questo caso)
-rispetto a \textbf{tol}.
-}
+    \, dx \equiv \sin \log 10^5.
+  $$
+  Costruire un'altra tabella, in cui si tabula l'errore vero (essendo l'integrale noto, in questo caso)
+  rispetto a \textbf{tol}.
+ }
 DA FINIRE
 \end{document}

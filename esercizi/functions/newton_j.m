@@ -1,5 +1,5 @@
-function [x, nit] = newton_j(fun, jacobian, x0, tol, maxit)
-%[x, nit] = newton_j(fun, jacobian, x0, tol, maxit)
+function [x, nit] = newton(fun, jacobian, x0, tol, maxit)
+%[x, nit] = newton(fun, jacobian, x0, tol, maxit)
 %Input: 
 %fun = Vettore di funzioni nonlineari di cui vogliamo trovare le radici.
 %jacobian = Matrice di funzioni contenenti il giacobiano di fun. 
