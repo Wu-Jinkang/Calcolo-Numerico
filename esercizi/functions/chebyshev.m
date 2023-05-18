@@ -15,7 +15,7 @@ elseif a >= b
 end
 
 x = cos(((2*(0:n) + 1)*pi)/(2*(n+1))); %Ascisse su [-1,1]
-x = (a+b)/2 + (b-a)/2*x;
+x = (a+b)/2 + ((b-a)/2)*x;
 
 return;
 end
