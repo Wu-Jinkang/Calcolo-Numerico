@@ -938,9 +938,10 @@ del punto stazionario della funzione:
 utilizzando tolleranze \textbf{tol = 1e-3, 1e-8, 1e-13.} Graficare la soluzione e tabulare in modo conveniente i risultati ottenuti.
 }
 
-Di seguito viene riportata la tabella contenente tutte le
+Di seguito vengono riportati sia la tabella contenente tutte le
 soluzioni calcolate dalla \textit{function} newton,
-dell'esercizio 14, per ogni tolleranza richiesta.
+dell'esercizio 14, per ogni tolleranza richiesta, che 
+il grafico ottenuto.
 
 \begin{center}
   \begin{longtable}{ |p{2.8cm}|p{2.8cm}|p{2.8cm}| }
@@ -1052,7 +1053,6 @@ dell'esercizio 14, per ogni tolleranza richiesta.
     \hline
   \end{longtable}
 \end{center}
-
 
 \section{
   Costruire una function, \textbf{lagrange.m}, avente la \underline{stessa sintassi} della function spline
@@ -1219,7 +1219,7 @@ Costruire una function Matlab che, specificato in ingresso il grado n del polino
 interpolante, e gli estremi dell'intervallo [a, b], calcoli le corrispondenti ascisse di Chebyshev.
 }
 \begin{lstlisting}[style=Matlab-editor]
-  function x = chebyshev(n, a, b)
+function x = chebyshev(n, a, b)
 %x = chebyshev(n, a, b)
 %Input:
 %n = Grado del polinomio
