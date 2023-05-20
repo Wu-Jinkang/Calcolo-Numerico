@@ -3,6 +3,7 @@
 \usepackage[margin=2.0cm]{geometry}
 \usepackage{multirow}
 \usepackage{longtable}
+\usepackage{graphicx}
 
 \titleformat*{\section}{\large\bfseries}
 
@@ -1052,8 +1053,11 @@ il grafico ottenuto.
     25.2343922260257  & 25.2244798518307  & 25.224479941140     \\
     \hline
   \end{longtable}
+  \begin{figure}[]
+    \centering
+    \includegraphics[scale=1, page=1]{./esercizi/imgs/graficonewtonj.pdf}
+  \end{figure}
 \end{center}
-
 \section{
   Costruire una function, \textbf{lagrange.m}, avente la \underline{stessa sintassi} della function spline
   di Matlab, che implementi, in modo \underline{vettoriale}, la forma di Lagrange del polinomio interpolante una
