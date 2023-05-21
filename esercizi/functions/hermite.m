@@ -1,7 +1,5 @@
 function yy = hermite(xi, fi, f1i, xx)
-% 
-% yy = hermite(xi, fi, f1i, xx)
-%
+%yy = hermite(xi, fi, f1i, xx)
 %Input:
 %xi = Vettore colonna contenente le ascisse d'interpolazione.
 %fi = Vettore colonna contenente i valori della funzione nelle ascisse d'interpolazione.
@@ -33,6 +31,12 @@ return;
 end
   
 function f = differenze_divise(x, f)
+%f = differenze_divise(x, f)
+%Input:
+%x = Vettore colonna contenente le ascisse d'interpolazione.
+%f = Vettore colonna contenente i valori della funzione nelle ascisse d'interpolazione.
+%Output:
+%f = Differenze divise calcolate.
 %Calcola le differenze divise
 n = (length(f)/2)-1;
 

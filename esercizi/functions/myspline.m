@@ -14,7 +14,7 @@ if nargin < 4
     error("Il numero degli argomenti e' errato." + newline + "Riprovare.");
 elseif length(xi) ~= length(fi)
     error("La lunghezza dei due vettori non corrisponde." + newline + "Riprovare.");
-elseif length(xi) ~= unique(xi)
+elseif length(xi) ~= length(unique(xi))
     error("Le ascisse di interpolazione non sono distinte tra loro." + newline + "Riprovare.");
 elseif size(xi, 2) > 1 || size(fi, 2) > 1
     error("Non e' stato inserito un vettore colonna correttamente." + newline + "Riprovare.")
@@ -28,7 +28,7 @@ q = zeros(n-1,1); %Vettore sottodiagonale
 
 for i = 2 : n
     hi = (xi(i) - xi(i-1));
-    hi1 = (xi(+1) - x(i));
+    hi1 = (xi(i+1) - xi(i));
     q(i-1) = hi / (hi + hi1);
     epsilon(i-1) = hi1 / (hi + hi1);
 end
@@ -41,16 +41,24 @@ if type == 0
     m = [0; m; 0];
 else
     a(1) = 2 - q(1);
-    a(n-1) = 2 - epsilon(n-1);
-    q(n-1) = q(n-1) - epsilon(n-1);
     epsilon(1) = epsilon(1) - q(1);
     diff_div(1) = (1 - q(1)) * diff_div(1);
+    q(1) = 0;
+
+    a(n-1) = 2 - epsilon(n-1);
+    q(n-1) = q(n-1) - epsilon(n-1);
     diff_div(n-1) = (1 - epsilon(n-1)) * diff_div(n-1);
-    
+    epsilon(n-1) = 0;
+
     m = tridia(a, q, epsilon, diff_div * 6);
+
+    m0 = diff_div(1) - m(1) - m(2);
+    mn =  diff_div(n-1) - m(n-1) - m(n-2);
+    m = [m0; m; mn];
 end
 
 yy = calcola_punti(xi, fi, m, xx);
+return;
 end
 
 function diff_div = diff_div_spline(xi, fi)
@@ -111,14 +119,18 @@ function yy = calcola_punti(xi, fi, m, xx)
 %yy = Valori della spline.
 %Calcola i valori della spline nei punti definiti in xx.
 
-n = length(xi);
-yy = zeros(size(xx));
+yy = zeros(length(xx), 1);
 
-for i = 1:length(xx)
-    for j = 1:n-1
-        if xx(i) >= xi(j) && xx(i) <= xi(j+1)
-            yy(i) = m(j,1)*(xi(j+1)-xx(i))^3/6 + m(j+1,1)*(xx(i)-xi(j))^3/6 + (fi(j)-m(j,1)*((xi(j+1)-xi(j))/6)^2)*(xi(j+1)-xx(i))/(xi(j+1)-xi(j)) + (fi(j+1)-m(j+1,1)*((xi(j+1)-xi(j))/6)^2)*(xx(i)-xi(j))/(xi(j+1)-xi(j));
+for j = 1 : length(xx)
+    for i = 2 : length(xi) 
+        if((xx(j) >= xi(i-1) && xx(j) <= xi(i)) || xx(j) < xi(1))
+            hi = xi(i)-xi(i-1);
+            ri = fi(i-1)-hi^2/6*m(i-1);
+            qi = (fi(i)-fi(i-1))/hi-hi/6*(m(i)-m(i-1));
+            yy(j) =((xx(j)-xi(i-1))^3*m(i)+(xi(i)-xx(j))^3*m(i-1))/(6*hi)+qi*(xx(j)-xi(i-1))+ri;
+            break
         end
     end
 end
+return;
 end

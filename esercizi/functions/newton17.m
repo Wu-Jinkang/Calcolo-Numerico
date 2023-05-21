@@ -11,7 +11,7 @@ function s = newton(x, y, xq)
 if(length(x) ~= length(unique(x))), error("Le ascisse d'interpolazione non sono distinte tra loro." + newline + "Riprovare."),end 
 if(length(x) ~= length(y)), error("Il numero delle ascisse d'interpolazione e quello dei valori della funzione non corrisponde." + newline + "Riprovare."),end
 if(isempty(xq)), error("Il vettore contenente le ascisse in cui interpolare la funzione e' vuoto." + newline + "Riprovare."),end
-if(size(x,2) > 1 || size(Y,2) > 1 || size(xq,2) > 1),error("Non sono stati inseriti correttamente i vettori colonna." + newline + "Riprovare."),end
+if(size(x,2) > 1 || size(y,2) > 1 || size(xq,2) > 1),error("Non sono stati inseriti correttamente i vettori colonna." + newline + "Riprovare."),end
 
 diff_divise = differenze_divise(x, y);
 n = length(diff_divise) - 1;

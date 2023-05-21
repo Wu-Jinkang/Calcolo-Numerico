@@ -1079,7 +1079,7 @@ il grafico ottenuto.
   if(length(x) ~= length(unique(x))), error("Le ascisse d'interpolazione non sono distinte tra loro." + newline + "Riprovare."),end 
   if(length(x) ~= length(y)), error("Il numero delle ascisse d'interpolazione e quello dei valori della funzione non corrisponde." + newline + "Riprovare."),end
   if(isempty(xq)), error("Il vettore contenente le ascisse in cui interpolare la funzione e' vuoto." + newline + "Riprovare."),end
-  if(size(x,2) > 1 || size(Y,2) > 1 || size(xq,2) > 1),error("Non sono stati inseriti correttamente i vettori colonna." + newline + "Riprovare."),end
+  if(size(x,2) > 1 || size(y,2) > 1 || size(xq,2) > 1),error("Non sono stati inseriti correttamente i vettori colonna." + newline + "Riprovare."),end
    
   n = size(x, 1);
   Lin = ones(size(xq, 1), n);
@@ -1109,45 +1109,45 @@ e successivamente la sommatoria \[ p(x) = \sum_{i = 0}^{n} f_i * L_{in}(x). \]
   funzione.
  }
  \begin{lstlisting}[style=Matlab-editor]
-function s = newton(x, y, xq)
-%s = newton(x, y, xq)
-%Input:
-%x = Vettore colonna contenete le ascisse d'interpolazione.
-%y = Vettore colonna contenete i valori della funzione nelle ascisse d'interpolazione.
-%xq = Vettore contente le ascisse in cui vogliamo approssimare la funzione.
-%Output:
-%s = Valori approssimati della funzione.
-%Calcola i valori approssimati della funzione, ottenuti attraverso il polinomio interpolante in forma di Newton nelle ascisse xq.
-
-if(length(x) ~= length(unique(x))), error("Le ascisse d'interpolazione non sono distinte tra loro." + newline + "Riprovare."),end 
-if(length(x) ~= length(y)), error("Il numero delle ascisse d'interpolazione e quello dei valori della funzione non corrisponde." + newline + "Riprovare."),end
-if(isempty(xq)), error("Il vettore contenente le ascisse in cui interpolare la funzione e' vuoto." + newline + "Riprovare."),end
-if(size(x,2) > 1 || size(Y,2) > 1 || size(xq,2) > 1),error("Non sono stati inseriti correttamente i vettori colonna." + newline + "Riprovare."),end
-
-diff_divise = differenze_divise(x, y);
-n = length(diff_divise) - 1;
-s = diff_divise(n+1) * ones(size(xq));
-
-%Uso l'algoritmo di Horner per ridurre il numero di operazioni
-for i=n:-1:1
-    s = s.*(xq-x(i)) + diff_divise(i);  
-end
-return;
-end
-
-function diff_divise = differenze_divise(x, f)
-%Calcola le differenze divise
-n = size(x);
-if(n ~= length(f)), error("La dimensione di x e quella di f non coincidono." + newline + "Riprovare."), end
-diff_divise = f;
-n = n-1;
-for i = 1 : n
-    for j = n + 1 : -1 : i + 1
-        diff_divise(j) = (diff_divise(j) - diff_divise(j-1))/(x(j) - x(j-i));
-    end
-end
-return;
-end
+  function s = newton(x, y, xq)
+  %s = newton(x, y, xq)
+  %Input:
+  %x = Vettore colonna contenete le ascisse d'interpolazione.
+  %y = Vettore colonna contenete i valori della funzione nelle ascisse d'interpolazione.
+  %xq = Vettore contente le ascisse in cui vogliamo approssimare la funzione.
+  %Output:
+  %s = Valori approssimati della funzione.
+  %Calcola i valori approssimati della funzione, ottenuti attraverso il polinomio interpolante in forma di Newton nelle ascisse xq.
+  
+  if(length(x) ~= length(unique(x))), error("Le ascisse d'interpolazione non sono distinte tra loro." + newline + "Riprovare."),end 
+  if(length(x) ~= length(y)), error("Il numero delle ascisse d'interpolazione e quello dei valori della funzione non corrisponde." + newline + "Riprovare."),end
+  if(isempty(xq)), error("Il vettore contenente le ascisse in cui interpolare la funzione e' vuoto." + newline + "Riprovare."),end
+  if(size(x,2) > 1 || size(y,2) > 1 || size(xq,2) > 1),error("Non sono stati inseriti correttamente i vettori colonna." + newline + "Riprovare."),end
+  
+  diff_divise = differenze_divise(x, y);
+  n = length(diff_divise) - 1;
+  s = diff_divise(n+1) * ones(size(xq));
+  
+  %Uso l'algoritmo di Horner per ridurre il numero di operazioni
+  for i=n:-1:1
+      s = s.*(xq-x(i)) + diff_divise(i);  
+  end
+  return;
+  end
+  
+  function diff_divise = differenze_divise(x, f)
+  %Calcola le differenze divise
+  n = size(x);
+  if(n ~= length(f)), error("La dimensione di x e quella di f non coincidono." + newline + "Riprovare."), end
+  diff_divise = f;
+  n = n-1;
+  for i = 1 : n
+      for j = n + 1 : -1 : i + 1
+          diff_divise(j) = (diff_divise(j) - diff_divise(j-1))/(x(j) - x(j-i));
+      end
+  end
+  return;
+  end
 \end{lstlisting}
 
 Per creare questa \textit{function} si e' andati, inizialmente, a calcolare il
@@ -1163,9 +1163,7 @@ il numero di operazioni, per calcolare i valori del polinomio nelle ascisse \tex
  }
 \begin{lstlisting}[style=Matlab-editor]
   function yy = hermite(xi, fi, f1i, xx)
-  % 
-  % yy = hermite(xi, fi, f1i, xx)
-  %
+  %yy = hermite(xi, fi, f1i, xx)
   %Input:
   %xi = Vettore colonna contenente le ascisse d'interpolazione.
   %fi = Vettore colonna contenente i valori della funzione nelle ascisse d'interpolazione.
@@ -1197,6 +1195,12 @@ il numero di operazioni, per calcolare i valori del polinomio nelle ascisse \tex
   end
     
   function f = differenze_divise(x, f)
+  %f = differenze_divise(x, f)
+  %Input:
+  %x = Vettore colonna contenente le ascisse d'interpolazione.
+  %f = Vettore colonna contenente i valori della funzione nelle ascisse d'interpolazione.
+  %Output:
+  %f = Differenze divise calcolate.
   %Calcola le differenze divise
   n = (length(f)/2)-1;
   
@@ -1324,7 +1328,10 @@ lenta rispetto le prime.
   Graficare l'errore di interpolazione anche per i polinomi interpolanti di Hermite di grado \textbf{nn=3:2:99},
   sia utilizzando ascisse equidistanti che ascisse di Chebyshev, nell'intervallo considerato.
  }
-DA FINIRE
+ Di seguito viene riportato il grafico dell'andamento dell'errore d'interpolazione, che cambia a seconda
+ della \textit{function} utilizzata e del tipo di ascisse usate.
+ \\
+ \includegraphics*[scale=0.80]{./esercizi/imgs/grafico_21.pdf}
 
 \section{
   Costruire una function, \textbf{myspline.m}, avente sintassi
@@ -1333,129 +1340,142 @@ DA FINIRE
   \textit{not-a-knot} (default).
  }
 \begin{lstlisting}[style=Matlab-editor]
-function yy = myspline(xi, fi, xx, type)
-%yy = myspline(xi, fi, xx, type)
-%Input:
-%xi = Valori delle ascisse.
-%fi = Valori della funzione calcolati nelle ascisse.
-%xx = Vettore contenente le ascisse a cui voglio approssimare la funzione.
-%type = Tipologia per risolvere l'esercizio.
-%Output:
-%yy = Spline calcolata.
-%Calcola la spline cubica interpolante naturale oppure la not-a-knot, a seconda del valore di type.
-
-if nargin < 4
-    error("Il numero degli argomenti e' errato." + newline + "Riprovare.");
-elseif length(xi) ~= length(fi)
-    error("La lunghezza dei due vettori non corrisponde." + newline + "Riprovare.");
-elseif length(xi) ~= unique(xi)
-    error("Le ascisse di interpolazione non sono distinte tra loro." + newline + "Riprovare.");
-elseif size(xi, 2) > 1 || size(fi, 2) > 1
-    error("Non e' stato inserito un vettore colonna correttamente." + newline + "Riprovare.")
-elseif isempty(xx)
-    error("La partizione assegnata e' vuota." + newline + "Riprovare.");
-end
+  function yy = myspline(xi, fi, xx, type)
+  %yy = myspline(xi, fi, xx, type)
+  %Input:
+  %xi = Valori delle ascisse.
+  %fi = Valori della funzione calcolati nelle ascisse.
+  %xx = Vettore contenente le ascisse a cui voglio approssimare la funzione.
+  %type = Tipologia per risolvere l'esercizio.
+  %Output:
+  %yy = Spline calcolata.
+  %Calcola la spline cubica interpolante naturale oppure la not-a-knot, a
+  %seconda del valore di type.
   
-n = length(xi) - 1;
-epsilon = zeros(n-1,1); %Vettore sovradiagonale
-q = zeros(n-1,1); %Vettore sottodiagonale
+  if nargin < 4
+      error("Il numero degli argomenti e' errato." + newline + "Riprovare.");
+  elseif length(xi) ~= length(fi)
+      error("La lunghezza dei due vettori non corrisponde." + newline + "Riprovare.");
+  elseif length(xi) ~= length(unique(xi))
+      error("Le ascisse di interpolazione non sono distinte tra loro." + newline + "Riprovare.");
+  elseif size(xi, 2) > 1 || size(fi, 2) > 1
+      error("Non e' stato inserito un vettore colonna correttamente." + newline + "Riprovare.")
+  elseif isempty(xx)
+      error("La partizione assegnata e' vuota." + newline + "Riprovare.");
+  end
   
-for i = 2 : n
-    hi = (xi(i) - xi(i-1));
-    hi1 = (xi(+1) - x(i));
-    q(i-1) = hi / (hi + hi1);
-    epsilon(i-1) = hi1 / (hi + hi1);
-end
+  n = length(xi) - 1;
+  epsilon = zeros(n-1,1); %Vettore sovradiagonale
+  q = zeros(n-1,1); %Vettore sottodiagonale
   
-diff_div = diff_div_spline(xi, fi); %Calcolo le differenze divise
+  for i = 2 : n
+      hi = (xi(i) - xi(i-1));
+      hi1 = (xi(i+1) - xi(i));
+      q(i-1) = hi / (hi + hi1);
+      epsilon(i-1) = hi1 / (hi + hi1);
+  end
   
-a = 2*ones(n-1,1);
-if type == 0
-    m = tridia(a, q, epsilon, diff_div * 6);
-    m = [0; m; 0];
-else
-    a(1) = 2 - q(1);
-    a(n-1) = 2 - epsilon(n-1);
-    q(n-1) = q(n-1) - epsilon(n-1);
-    epsilon(1) = epsilon(1) - q(1);
-    diff_div(1) = (1 - q(1)) * diff_div(1);
-    diff_div(n-1) = (1 - epsilon(n-1)) * diff_div(n-1);
-     
-    m = tridia(a, q, epsilon, diff_div * 6);
-end
+  diff_div = diff_div_spline(xi, fi); %Calcolo le differenze divise
   
-yy = calcola_punti(xi, fi, m, xx);
-end
+  a = 2*ones(n-1,1);
+  if type == 0
+      m = tridia(a, q, epsilon, diff_div * 6);
+      m = [0; m; 0];
+  else
+      a(1) = 2 - q(1);
+      epsilon(1) = epsilon(1) - q(1);
+      diff_div(1) = (1 - q(1)) * diff_div(1);
+      q(1) = 0;
   
-function diff_div = diff_div_spline(xi, fi)
-%diff_div = diffdivspline(xi, fi)
-%Input:
-%xi = Valori delle ascisse.
-%fi = Valori della funzione calcolati nelle ascisse.
-%Output:
-%diff_div = Differenze divise calcolate.
-%Calcola le differenze divise per la spline
- 
-n = size(xi);
-diff_div = fi;
-n = n-1;
-for j = 1 : 2
-    for i = n+1 : -1 : j+1
-        diff_div(i) = (diff_div(i) - diff_div(i-1))/(xi(i) - xi(i-j));
-    end
-end
-diff_div = diff_div(3:n+1);
-return;
-end
+      a(n-1) = 2 - epsilon(n-1);
+      q(n-1) = q(n-1) - epsilon(n-1);
+      diff_div(n-1) = (1 - epsilon(n-1)) * diff_div(n-1);
+      epsilon(n-1) = 0;
   
-function x = tridia(a, b, c, g)
-%x = tridia(a, b, c, g)
-%Input:
-%a = Vettore diagonale principale.
-%b = Vettore sovradiagonale.
-%c = Vettore sottodiagonale.
-%g = Vettore dei termini noti.
-%Output:
-%x = Vettore soluzione
-%Risoluzione di un sistema tridiagonale.
+      m = tridia(a, q, epsilon, diff_div * 6);
   
-n = length(g);
-x = g;
-for i = 1 : n-1
-   b(i) = b(i)/a(i);
-   a(i+1) = a(i+1) - b(i)*c(i);
-   x(i+1) = x(i+1) - b(i)*x(i);
-end
-
-x(n) = x(n)/a(n);
-for i = n-1 : -1 : 1
-   x(i) = (x(i) - c(i)*x(i+1))/a(i);
-end
-return;
-end
+      m0 = diff_div(1) - m(1) - m(2);
+      mn =  diff_div(n-1) - m(n-1) - m(n-2);
+      m = [m0; m; mn];
+  end
   
-function yy = calcola_punti(xi, fi, m, xx)
-%yy = calcola_punti(xi, fi, m, xx)
-%Input:
-%xi = Valori delle ascisse.
-%fi = Valori della funzione calcolati nelle ascisse.
-%m = Matrice dei coefficienti.
-%xx = Partizione assegnata.
-%Output:
-%yy = Valori della spline.
-%Calcola i valori della spline nei punti definiti in xx.
+  yy = calcola_punti(xi, fi, m, xx);
+  return;
+  end
   
-n = length(xi);
-yy = zeros(size(xx));
-
-for i = 1:length(xx)
-    for j = 1:n-1
-        if xx(i) >= xi(j) && xx(i) <= xi(j+1)
-            yy(i) = m(j,1)*(xi(j+1)-xx(i))^3/6 + m(j+1,1)*(xx(i)-xi(j))^3/6 + (fi(j)-m(j,1)*((xi(j+1)-xi(j))/6)^2)*(xi(j+1)-xx(i))/(xi(j+1)-xi(j)) + (fi(j+1)-m(j+1,1)*((xi(j+1)-xi(j))/6)^2)*(xx(i)-xi(j))/(xi(j+1)-xi(j));
-        end
-    end
-end
-end
+  function diff_div = diff_div_spline(xi, fi)
+  %diff_div = diffdivspline(xi, fi)
+  %Input:
+  %xi = Valori delle ascisse.
+  %fi = Valori della funzione calcolati nelle ascisse.
+  %Output:
+  %diff_div = Differenze divise calcolate.
+  %Calcola le differenze divise per la spline
+  
+  n = size(xi);
+  diff_div = fi;
+  n = n-1;
+  for j = 1 : 2
+      for i = n+1 : -1 : j+1
+          diff_div(i) = (diff_div(i) - diff_div(i-1))/(xi(i) - xi(i-j));
+      end
+  end
+  diff_div = diff_div(3:n+1);
+  return;
+  end
+  
+  function x = tridia(a, b, c, g)
+  %x = tridia(a, b, c, g)
+  %Input:
+  %a = Vettore diagonale principale.
+  %b = Vettore sovradiagonale.
+  %c = Vettore sottodiagonale.
+  %g = Vettore dei termini noti.
+  %Output:
+  %x = Vettore soluzione
+  %Risoluzione di un sistema tridiagonale.
+  
+  n = length(g);
+  x = g;
+  for i = 1 : n-1
+     b(i) = b(i)/a(i);
+     a(i+1) = a(i+1) - b(i)*c(i);
+     x(i+1) = x(i+1) - b(i)*x(i);
+  end
+  
+  x(n) = x(n)/a(n);
+  for i = n-1 : -1 : 1
+     x(i) = (x(i) - c(i)*x(i+1))/a(i);
+  end
+  return;
+  end
+  
+  function yy = calcola_punti(xi, fi, m, xx)
+  %yy = calcola_punti(xi, fi, m, xx)
+  %Input:
+  %xi = Valori delle ascisse.
+  %fi = Valori della funzione calcolati nelle ascisse.
+  %m = Matrice dei coefficienti.
+  %xx = Partizione assegnata.
+  %Output:
+  %yy = Valori della spline.
+  %Calcola i valori della spline nei punti definiti in xx.
+  
+  yy = zeros(length(xx), 1);
+  
+  for j = 1 : length(xx)
+      for i = 2 : length(xi) 
+          if((xx(j) >= xi(i-1) && xx(j) <= xi(i)) || xx(j) < xi(1))
+              hi = xi(i)-xi(i-1);
+              ri = fi(i-1)-hi^2/6*m(i-1);
+              qi = (fi(i)-fi(i-1))/hi-hi/6*(m(i)-m(i-1));
+              yy(j) =((xx(j)-xi(i-1))^3*m(i)+(xi(i)-xx(j))^3*m(i-1))/(6*hi)+qi*(xx(j)-xi(i-1))+ri;
+              break
+          end
+      end
+  end
+  return;
+  end
 \end{lstlisting}
 
 \section{
@@ -1465,7 +1485,12 @@ utilizzando una partizione $ \delta = {-5 = x_0 < \cdots < x_n = 5} $, con ascis
 \\
 Utilizzare 10001 punti equispaziati nell'intervallo $ [-5,5] $ per ottenere la stima dell'errore.
 }
-DA FINIRE
+Di seguito viene riportato il grafico dell'andamento dell'errore do approssimazione, utilizzando
+le \textit{spline} interpolanti naturale e \textit{not-a-knot}, per approssimare la funzione di 
+Runge nell'intervallo desiderato
+\\
+\includegraphics*[scale=0.80]{./esercizi/imgs/grafico_23.pdf}
+
 
 \section{
   E' noto che un fenomeno fisico evolve come $ y = x^n$, con \textit{n} incognito. Il file \textbf{data.mat},
@@ -1520,12 +1545,100 @@ DA FINIRE
 \section{
   Implementare la formula composita adattativa di Simpson.
  }
-DA FINIRE
+\begin{lstlisting}[style=Matlab-editor]
+  function I2 = adapsim(a, b, f, tol, fa, f1, fb)
+  %I2 = adapsim(a, b, f, tol, fa, f1, fb)
+  %Input:
+  %a,b = Estremi dell'intervallo.
+  %f = Funzione integranda.
+  %tol = Tolleranza massima.
+  %fa = Funzione calcolata nell'estremo a.
+  %f1 = Funzione calcolata nel punto medio.
+  %fb = Funzione calcolata nell'estremo b.
+  %Output:
+  %I2 = Approssimazione calcolata.
+  %Calcola l'approssimazione dell'integrale mediante la formula adattiva Simpson.
+  
+  if tol <=0, error("La tolleranza deve essere positiva." + newline + "Riprovare."), end
+  if a >=b, error("L'intervallo e' stato inserito in maniera non corretta." + newline + "Riprovare."), end
+  x1 = (a+b)/2;
+  if nargin <= 4
+      fa = feval(f, a);
+      f1 = feval(f, 1);
+      fb = feval(f, b);
+  end
+  h = (b-a)/6;
+  x2 = (a+x1)/2;
+  x3 = (x1+b)/2;
+  f2 = feval(f, x2);
+  f3 = feval(f, x3);
+  I1 = h * (fa + 4*f1 + fb);
+  I2 = .5 * h * (fa + 4*f1 + 2*f2 + 4*f3 + fb);
+  err = (abs(I2 - I1))/15;
+  if err > tol
+      I2 = adapsim(a, x1, f, tol/2, fa, f2, f1) + adapsim(x1, b, f, tol/2, f1, f3, fb);
+  end
+  return;
+  end  
+\end{lstlisting}
 
 \section{
   Implementare la formula composita adattativa di Newton-Cotes di grado \textbf{k=4}.
  }
-DA FINIRE
+\begin{lstlisting}[style=Matlab-editor]
+  function [I, err] = newton_cotes_adaptive(f, a, b, tol)
+  %[I, err] = newton_cotes_adaptive(f, a, b, tol)
+  %Input:
+  %f = Funzione da integrare.
+  %a,b = Estremi dell'intervallo di integrazione.
+  %tol = Tolleranza relativa.
+  %Output:
+  %I = Stima calcolata.
+  %err = Errore relativo.
+  %Calcola la formula composita adattativa di Newton-Cotes di grado k=4
+  % su ogni sottointervallo dell'intervallo [a,b] fino a quando la stima
+  % dell'errore relativo e' inferiore alla tolleranza relativa tol.
+  
+  n = 1;
+  h = (b-a)/n;
+  x = linspace(a, b, n + 1);
+  y = feval(f, x);
+  I = h/2 * (y(1) + y(end) + 2*sum(y(2:end-1)));
+  
+  while true
+      % Calcola la stima dell'errore relativo
+      err = abs(I - newton_cotes_adaptive_helper(f, a, b, n*2))/abs(I);
+      
+      % Se l'errore e' inferiore alla tolleranza relativa, restituisci il risultato
+      if err < tol
+          return;
+      end
+      
+      % Altrimenti, raddoppia il numero di sottointervalli e ripeti il calcolo
+      n = n*2;
+      h = (b-a)/n;
+      x = linspace(a, b, n + 1);
+      y = f(x);
+      I = h/2*(y(1) + y(end) + 2*sum(y(2:end-1)));
+  end
+  
+  function I = newton_cotes_adaptive_helper(f, a, b, n)
+  %I = newton_cotes_adaptive_helper(f, a, b, n)
+  %Input:
+  %f = Funzione da integrare.
+  %a,b = Estremi dell'intervallo di integrazione.
+  %tol = Tolleranza relativa.
+  %Output:
+  %I = Stima calcolata.
+  % Calcola la formula composita adattativa di Newton-Cotes di grado k=4
+  % su ogni sottointervallo dell'intervallo [a,b] senza verificare la tolleranza.
+  
+  h = (b-a)/n;
+  x = linspace(a, b, n + 1);
+  y = f(x);
+  I = h/2*(y(1) + y(end) + 2*sum(y(2:end-1)));
+  end
+\end{lstlisting}
 
 \section{
   Confrontare le formule adattative degli ultimi due esercizi, tabulando il numero
