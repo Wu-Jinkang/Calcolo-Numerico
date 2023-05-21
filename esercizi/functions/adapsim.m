@@ -16,7 +16,7 @@ if a >=b, error("L'intervallo e' stato inserito in maniera non corretta." + newl
 x1 = (a+b)/2;
 if nargin <= 4
     fa = feval(f, a);
-    f1 = feval(f, 1);
+    f1 = feval(f, x1);
     fb = feval(f, b);
 end
 h = (b-a)/6;

@@ -35,5 +35,5 @@ end
 % Grafico dell'errore di approssimazione
 semilogy(n_values, errors_natural, 'g', n_values, errors_not_a_knot, 'b');
 legend('Spline naturale','Spline not-a-knot');
-xlabel('Numero di nodi');
+xlabel('Numero di nodi di interpolazione');
 ylabel('Errore di approssimazione');
