@@ -9,10 +9,12 @@ function [x, nr] = miaqr(A, b)
 %Risolve il sistema Ax = b nel senso dei minimi quadrati e ritorna la norma euclidea del vettore residuo.
 
 [m, n] = size(A);
-if (n>=m),error("Il sistema non e' sovradeterminato." + newline + "Riprovare."),end
+if n >= m, error("Il sistema non e' sovradeterminato." + newline + "Riprovare."),end
+
 k = size(b,1);
-if(m~=k), error("La dimensione della matrice e quella dei termini noti sono differenti." + newline + "Riprovare."), end
-if(size(b,2)>1),error("Non e' stato inserito un vettore dei termini noti corretto." + newline + "Riprovare."),end
+if m ~= k, error("La dimensione della matrice e quella dei termini noti sono differenti." + newline + "Riprovare."), end
+
+if(size(b,2) > 1),error("Non e' stato inserito un vettore dei termini noti corretto." + newline + "Riprovare."),end
 
 QR = QRfatt(A); %Fattorizzo A tramite la fattorizzazione QR di Householder
 [x,nr] = QRsolve(QR,b); %Risolvo il sistema

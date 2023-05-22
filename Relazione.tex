@@ -52,8 +52,8 @@ dimostrando quanto richiesto.
 \section{Matlab utilizza la doppia precisione IEEE. Stabilire, pertanto,
   il nesso tra la variabile eps e la precisione di macchina di questa aritmetica.}
 
-Sapendo che la precisione di macchina \textit{u} (nel caso si usi l'arrotondamento) si ottiene come: \textit{\[u =\frac{1}{2}b^{1-m}\]}
-dove b e' la base scelta, mentre m e' il numero di cifre usate per la mantissa. Nello standard IEEE la base b corrisponde a 2,
+E' noto che la precisione di macchina \textit{u}, nel caso di arrotondamento, si ottiene come: \textit{\[u =\frac{1}{2}b^{1-m}\]}
+dove b corrisponde alla base scelta, mentre m e' il numero di cifre usate per la mantissa. Nello standard IEEE la base b corrisponde a 2,
 mentre il numero usato per la mantissa e' pari a 52. Allora, la precisione di macchina sara':  \textit{\[u =\frac{1}{2}2^{1-52}=2^{-52}\]}
 Questo valore e' il medesimo contenuto nella variabile \textbf{eps} di Matlab.
 Infatti, la precisione di macchina e' definita come il massimo errore relativo dovuto alla rappresentazione in aritmetica finita di un numero reale.
@@ -75,27 +75,28 @@ Confrontare con il risultato fornito da $ x^{\frac{1}{6}} $ per 20 valori di x, 
 tabulando i risultati in modo che si possa verificare che si e' ottenuta la massima precisione possibile.}
 
 \begin{lstlisting}[style=Matlab-editor]
-  function rad = radice(x)
-  %rad = radice(x)
-  %Input: x, numero di cui si vuole conoscere la radice
-  %Output: rad, radice sesta del numero in input
-  %Restituisce la radice sesta del numero passato in input.
+function rad = radice(x)
+%rad = radice(x)
+%Input: 
+$x = Numero di cui si vuole conoscere la radice sesta
+%Output:
+%rad = Radice sesta calcolata
+%Restituisce la radice sesta del numero passato in input.
   
-  if x==0
-      rad=0;
-      return;
-  end
-  if x<0, error("Non esiste la radice sesta di un numero negativo." + newline + "Riprovare."), end
-  x0=x;
-  for i=0:1000
-      delta=(1/6)*((x/(x0.^5))-x0);
-      x0=x0+delta;
-      if (abs(delta)<abs(eps)) %controllo di aver raggiunto la massima precisione possibile
-          break; 
-      end
-  end
-  rad=x0;
-  return;
+if x == 0
+    rad = 0;
+    return;
+end
+if x < 0, error("Il numero inserito deve essere positivo." + newline + "Riprovare."), end
+x0=x;
+for i=0:1000
+    delta=(1/6)*((x/(x0.^5))-x0);
+    x0=x0+delta;
+    if (abs(delta)<abs(eps)), break, end 
+end
+rad = x0;
+return;
+end
 \end{lstlisting}
 \begin{center}
   \begin{tabular}{ |p{2.7cm}||p{2.7cm}|p{2.7cm}| }
@@ -319,7 +320,7 @@ linearmente parlando, rispetto agli altri due metodi.
   n = size(LU);
   p = [1:n];
   for i = 1:n-1
-      [maxv, k] = max(abs(LU(i:n, i)));   %Considero il valore massimo del vettore in argomento
+      [maxv, k] = max(abs(LU(i:n, i)));
       if(maxv == 0), error("La matrice e' singolare." + newline + "Riprovare."), end
       k = k+i-1;
       if k>i
@@ -439,10 +440,12 @@ La complessità per la funzione LUpivoting e' di circa $ \frac{2}{3}n^3 $, mentr
   % -D = Matrice diagonale.
   %Esegue la fattorizzazione LDL^t.
   
-  n = size(A);
   LDLt = A;
   if(LDLt(1, 1) <= 0), error("La matrice non e' sdp." + newline + "Riprovare."), end
+  
+  n = size(A);
   LDLt(2:n, 1) = LDLt(2:n, 1)/LDLt(1, 1);
+  
   for i = 2:n
       v = (LDLt(i, 1:i-1).').*diag(LDLt(1:i-1, 1:i-1));
       LDLt(i, i) = LDLt(i, i) - LDLt(i, 1:i-1)*v;
@@ -576,9 +579,11 @@ il sistema lineare.
   %Risolve il sistema Ax = b nel senso dei minimi quadrati e ritorna la norma euclidea del vettore residuo.
   
   [m, n] = size(A);
-  if (n>=m),error("Il sistema non e' sovradeterminato." + newline + "Riprovare."),end
+  if n >= m, error("Il sistema non e' sovradeterminato." + newline + "Riprovare."),end
+  
   k = size(b,1);
-  if(m~=k), error("La dimensione della matrice e quella dei termini noti sono differenti." + newline + "Riprovare."), end
+  if m ~= k, error("La dimensione della matrice e quella dei termini noti sono differenti." + newline + "Riprovare."), end
+ 
   if(size(b,2)>1),error("Non e' stato inserito un vettore dei termini noti corretto." + newline + "Riprovare."),end
   
   QR = QRfatt(A); %Fattorizzo A tramite la fattorizzazione QR di Householder
@@ -626,7 +631,7 @@ il sistema lineare.
       x(i:m) = x(i:m)-((2*(v*v'))/(v'*v))*x(i:m);
   end
   x(1:n) = Usolve(QR(1:n , 1 : n), x(1 : n));
-  norma_euclidea = norm(x(n+1:m)); %Del vettore residuo
+  norma_euclidea = norm(x(n+1:m));
   x=x(1:n);
   end
   
@@ -874,35 +879,37 @@ piu' che triplicata.
   Prevedere opportuni valori di \textit{default} per gli ultimi due parametri
   di ingresso.}
 \begin{lstlisting}[style=Matlab-editor]
-  function [x, nit] = newton(fun, jacobian, x0, tol, maxit)
-  %[x, nit] = newton(fun, jacobian, x0, tol, maxit)
-  %Input: 
-  %fun = Vettore di funzioni nonlineari di cui vogliamo trovare le radici.
-  %jacobian = Matrice di funzioni contenenti il giacobiano di fun. 
-  %x0 = Vettore di partenza.
-  %Input opzionali:
-  %tol = Tolleranza desiderata(default = precisione di macchina).
-  %max = Massimo numero di iterazioni del metodo(default = 1000).
-  %Output:
-  %x = Vettore contente le radici del sistema non lineare.
-  %nit = Numero di iterazioni compiute dal metodo per trovare la radice.
-  %Trova il vettore soluzione di un sistema di equazioni usando il metodo di Newton partendo da x0
+function [x, nit] = newton(fun, jacobian, x0, tol, maxit)
+%[x, nit] = newton(fun, jacobian, x0, tol, maxit)
+%Input: 
+%fun = Vettore di funzioni nonlineari di cui vogliamo trovare le radici.
+%jacobian = Matrice di funzioni contenenti il giacobiano di fun. 
+%x0 = Vettore di partenza.
+%Input opzionali:
+%tol = Tolleranza desiderata(default = precisione di macchina).
+%max = Massimo numero di iterazioni del metodo(default = 1000).
+%Output:
+%x = Vettore contente le radici del sistema non lineare.
+%nit = Numero di iterazioni compiute dal metodo per trovare la radice.
+%Trova il vettore soluzione di un sistema di equazioni usando il metodo di Newton partendo da x0
   
-  if ~exist("tol", "var"), tol=eps; end 
-  if ~exist("maxit", "var"), maxit=1000; end
-  nit=0;
-  x=x0;
-  j=jacobian(x);
-  for i = 1:maxit
-      f = -1*fun(x);
-      dx = mialu(j,f); %Uso la function mialu per ricavarmi il vettore della differenza dx
-      x = x + dx;
-      nit = nit + 1;
-      if(norm(dx)<=tol*(1+norm(x-dx)))   %Controllo se la tolleranza e' rispettata
-          break;
-      end
-  end
-  if (norm(dx)>tol*(1+norm(x-dx))), disp("Il metodo non coverge."), end
+if ~exist("tol", "var"), tol=eps; end 
+if ~exist("maxit", "var"), maxit=1000; end
+  
+nit = 0;
+x = x0;
+j = jacobian(x);
+
+for i = 1:maxit
+    f = -1*fun(x);
+    dx = mialu(j,f);
+    x = x + dx;
+    nit = nit + 1;
+    if(norm(dx)<=tol*(1+norm(x-dx))), break, end
+end
+if (norm(dx)>tol*(1+norm(x-dx))), disp("Il metodo non coverge."), end
+return;
+end
 \end{lstlisting}
 
 La funzione converge, quadraticamente, in un opportuno intorno della radice, solo se la funzione stessa ha derivate seconde continue,
@@ -1066,37 +1073,37 @@ il grafico ottenuto.
  }
 
 \begin{lstlisting}[style=Matlab-editor]
-  function s = lagrange(x, y, xq)
-  %s = lagrange(x, y, xq)
-  %Input:
-  %x = Vettore contenete le ascisse d'interpolazione.
-  %y = Vettore contenete i valori della funzione nelle ascisse d'interpolazione.
-  %xq = Vettore contenente le ascisse in cui vogliamo approssimare la funzione.
-  %Output:
-  %s = Valori approssimati della funzione.
-  %Calcola i valori approssimati della funzione, ottenuti mediante il polinomio interpolante, in forma di Lagrange, nelle ascisse xq.
+function s = lagrange(x, y, xq)
+%s = lagrange(x, y, xq)
+%Input:
+%x = Vettore contenete le ascisse d'interpolazione.
+%y = Vettore contenete i valori della funzione nelle ascisse d'interpolazione.
+%xq = Vettore contenente le ascisse in cui vogliamo approssimare la funzione.
+%Output:
+%s = Valori approssimati della funzione.
+%Calcola i valori approssimati della funzione, ottenuti mediante il polinomio interpolante, in forma di Lagrange, nelle ascisse xq.
   
-  if(length(x) ~= length(unique(x))), error("Le ascisse d'interpolazione non sono distinte tra loro." + newline + "Riprovare."),end 
-  if(length(x) ~= length(y)), error("Il numero delle ascisse d'interpolazione e quello dei valori della funzione non corrisponde." + newline + "Riprovare."),end
-  if(isempty(xq)), error("Il vettore contenente le ascisse in cui interpolare la funzione e' vuoto." + newline + "Riprovare."),end
-  if(size(x,2) > 1 || size(y,2) > 1 || size(xq,2) > 1),error("Non sono stati inseriti correttamente i vettori colonna." + newline + "Riprovare."),end
+if(length(x) ~= length(unique(x))), error("Le ascisse d'interpolazione non sono distinte tra loro." + newline + "Riprovare."),end 
+if(length(x) ~= length(y)), error("Il numero delle ascisse d'interpolazione e quello dei valori della funzione non corrisponde." + newline + "Riprovare."),end
+if(isempty(xq)), error("Il vettore contenente le ascisse in cui interpolare la funzione e' vuoto." + newline + "Riprovare."),end
+if(size(x,2) > 1 || size(y,2) > 1 || size(xq,2) > 1),error("Non sono stati inseriti correttamente i vettori colonna." + newline + "Riprovare."),end
    
-  n = size(x, 1);
-  Lin = ones(size(xq, 1), n);
-  %Calcolo la produttoria Lin(x)
-  for i = 1 : n
-      for j = 1 : n
-          if (i~=j)
-              Lin(:,i)=Lin(:,i).*((xq-x(j))/(x(i)-x(j)));
-          end
-      end
-  end
-  s = zeros(size(xq));
-  %Calcolo la sommatoria fi*Lin(x)
-  for i=1:n
-      s = s+y(i).*Lin(:,i);
-  end
-  end
+n = size(x, 1);
+Lin = ones(size(xq, 1), n);
+%Calcolo la produttoria Lin(x)
+for i = 1 : n
+    for j = 1 : n
+        if (i~=j)
+            Lin(:,i)=Lin(:,i).*((xq-x(j))/(x(i)-x(j)));
+        end
+    end
+end
+s = zeros(size(xq));
+%Calcolo la sommatoria fi*Lin(x)
+for i=1:n
+    s = s+y(i).*Lin(:,i);
+end
+end
 \end{lstlisting}
 
 Per creare questa \textit{function} si e' andati, inizialmente, a calcolare la 
@@ -1109,45 +1116,45 @@ e successivamente la sommatoria \[ p(x) = \sum_{i = 0}^{n} f_i * L_{in}(x). \]
   funzione.
  }
  \begin{lstlisting}[style=Matlab-editor]
-  function s = newton(x, y, xq)
-  %s = newton(x, y, xq)
-  %Input:
-  %x = Vettore colonna contenete le ascisse d'interpolazione.
-  %y = Vettore colonna contenete i valori della funzione nelle ascisse d'interpolazione.
-  %xq = Vettore contente le ascisse in cui vogliamo approssimare la funzione.
-  %Output:
-  %s = Valori approssimati della funzione.
-  %Calcola i valori approssimati della funzione, ottenuti attraverso il polinomio interpolante in forma di Newton nelle ascisse xq.
+function s = newton(x, y, xq)
+%s = newton(x, y, xq)
+%Input:
+%x = Vettore colonna contenete le ascisse d'interpolazione.
+%y = Vettore colonna contenete i valori della funzione nelle ascisse d'interpolazione.
+%xq = Vettore contente le ascisse in cui vogliamo approssimare la funzione.
+%Output:
+%s = Valori approssimati della funzione.
+%Calcola i valori approssimati della funzione, ottenuti attraverso il polinomio interpolante in forma di Newton nelle ascisse xq.
   
-  if(length(x) ~= length(unique(x))), error("Le ascisse d'interpolazione non sono distinte tra loro." + newline + "Riprovare."),end 
-  if(length(x) ~= length(y)), error("Il numero delle ascisse d'interpolazione e quello dei valori della funzione non corrisponde." + newline + "Riprovare."),end
-  if(isempty(xq)), error("Il vettore contenente le ascisse in cui interpolare la funzione e' vuoto." + newline + "Riprovare."),end
-  if(size(x,2) > 1 || size(y,2) > 1 || size(xq,2) > 1),error("Non sono stati inseriti correttamente i vettori colonna." + newline + "Riprovare."),end
+if(length(x) ~= length(unique(x))), error("Le ascisse d'interpolazione non sono distinte tra loro." + newline + "Riprovare."),end 
+if(length(x) ~= length(y)), error("Il numero delle ascisse d'interpolazione e quello dei valori della funzione non corrisponde." + newline + "Riprovare."),end
+if(isempty(xq)), error("Il vettore contenente le ascisse in cui interpolare la funzione e' vuoto." + newline + "Riprovare."),end
+if(size(x,2) > 1 || size(y,2) > 1 || size(xq,2) > 1),error("Non sono stati inseriti correttamente i vettori colonna." + newline + "Riprovare."),end
+ 
+diff_divise = differenze_divise(x, y);
+n = length(diff_divise) - 1;
+s = diff_divise(n+1) * ones(size(xq));
   
-  diff_divise = differenze_divise(x, y);
-  n = length(diff_divise) - 1;
-  s = diff_divise(n+1) * ones(size(xq));
+%Uso l'algoritmo di Horner per ridurre il numero di operazioni
+for i=n:-1:1
+    s = s.*(xq-x(i)) + diff_divise(i);  
+end
+return;
+end
   
-  %Uso l'algoritmo di Horner per ridurre il numero di operazioni
-  for i=n:-1:1
-      s = s.*(xq-x(i)) + diff_divise(i);  
-  end
-  return;
-  end
-  
-  function diff_divise = differenze_divise(x, f)
-  %Calcola le differenze divise
-  n = size(x);
-  if(n ~= length(f)), error("La dimensione di x e quella di f non coincidono." + newline + "Riprovare."), end
-  diff_divise = f;
-  n = n-1;
-  for i = 1 : n
-      for j = n + 1 : -1 : i + 1
-          diff_divise(j) = (diff_divise(j) - diff_divise(j-1))/(x(j) - x(j-i));
-      end
-  end
-  return;
-  end
+function diff_divise = differenze_divise(x, f)
+%Calcola le differenze divise
+n = size(x);
+if(n ~= length(f)), error("La dimensione di x e quella di f non coincidono." + newline + "Riprovare."), end
+diff_divise = f;
+n = n-1;
+for i = 1 : n
+    for j = n + 1 : -1 : i + 1
+        diff_divise(j) = (diff_divise(j) - diff_divise(j-1))/(x(j) - x(j-i));
+    end
+end
+return;
+end
 \end{lstlisting}
 
 Per creare questa \textit{function} si e' andati, inizialmente, a calcolare il
@@ -1162,63 +1169,62 @@ il numero di operazioni, per calcolare i valori del polinomio nelle ascisse \tex
   che implementi, in modo \underline{vettoriale}, il polinomio interpolante di Hermite.
  }
 \begin{lstlisting}[style=Matlab-editor]
-  function yy = hermite(xi, fi, f1i, xx)
-  %yy = hermite(xi, fi, f1i, xx)
-  %Input:
-  %xi = Vettore colonna contenente le ascisse d'interpolazione.
-  %fi = Vettore colonna contenente i valori della funzione nelle ascisse d'interpolazione.
-  %f1i = Vettore colonna contenente i valori della derivata prima, che assume nelle ascisse d'interpolazione.
-  %xx = Vettore contenente le ascisse in cui vogliamo approssimare la funzione.
-  %Output:
-  %yy = Valori approssimati della funzione con il polinomio interpolante di hermite.
-  %Calcola i valori approssimati della funzione, calcolati attraverso il polinomio interpolante in forma di Lagrange nelle ascisse xx.
+function yy = hermite(xi, fi, f1i, xx)
+%yy = hermite(xi, fi, f1i, xx)
+%Input:
+%xi = Vettore colonna contenente le ascisse d'interpolazione.
+%fi = Vettore colonna contenente i valori della funzione nelle ascisse d'interpolazione.
+%f1i = Vettore colonna contenente i valori della derivata prima, che assume nelle ascisse d'interpolazione.
+%xx = Vettore contenente le ascisse in cui vogliamo approssimare la funzione.
+%Output:
+%yy = Valori approssimati della funzione con il polinomio interpolante di hermite.
+%Calcola i valori approssimati della funzione, calcolati attraverso il polinomio interpolante in forma di Lagrange nelle ascisse xx.
   
-  if(length(xi) ~= length(unique(xi))), error("Le ascisse d'interpolazione non sono distinte tra loro." + newline + "Riprovare."),end 
-  if(length(xi) ~= length(fi)), error("Il numero delle ascisse d'interpolazione e quello dei valori della funzione non corrisponde." + newline + "Riprovare."),end
-  if(isempty(xx)), error("Il vettore xx non contiene alcuna ascissa." + newline + "Riprovare."), end  
-  if(length(fi) ~= length(f1i)), error("La lunghezza di fi non corrisponde a quella di f1i." + newline + "Riprovare."),end
-  if(size(xi,2)>1 || size(fi,2)>1 || size(f1i,2)>1), error("Non sono stati inseriti correttamente i vettori colonna." + newline + "Riprovare."),end
+if(length(xi) ~= length(unique(xi))), error("Le ascisse d'interpolazione non sono distinte tra loro." + newline + "Riprovare."),end 
+if(length(xi) ~= length(fi)), error("Il numero delle ascisse d'interpolazione e quello dei valori della funzione non corrisponde." + newline + "Riprovare."),end
+if(isempty(xx)), error("Il vettore xx non contiene alcuna ascissa." + newline + "Riprovare."), end  
+if(length(fi) ~= length(f1i)), error("La lunghezza di fi non corrisponde a quella di f1i." + newline + "Riprovare."),end
+if(size(xi,2)>1 || size(fi,2)>1 || size(f1i,2)>1), error("Non sono stati inseriti correttamente i vettori colonna." + newline + "Riprovare."),end
   
-  n = (length(xi));
-  fi(1:2:2*n-1) = fi;
-  fi(2:2:2*n) = f1i;
+n = (length(xi));
+fi(1:2:2*n-1) = fi;
+fi(2:2:2*n) = f1i;
   
-  diff_divise = differenze_divise(xi, fi');
+diff_divise = differenze_divise(xi, fi');
     
-  n = length(diff_divise)-1;
-  yy = diff_divise(n+1)*ones(size(xx));    
-  %Uso l'algoritmo di Horner per ridurre il numero di operazioni
-  for i = n:-1:1
-      yy = yy.*(xx-xi(ceil(i/2)))+diff_divise(i);
-  end
-  return;
-  end
+n = length(diff_divise)-1;
+yy = diff_divise(n+1)*ones(size(xx));    
+%Uso l'algoritmo di Horner per ridurre il numero di operazioni
+for i = n:-1:1
+    yy = yy.*(xx-xi(ceil(i/2)))+diff_divise(i);
+end
+return;
+end
     
-  function f = differenze_divise(x, f)
-  %f = differenze_divise(x, f)
-  %Input:
-  %x = Vettore colonna contenente le ascisse d'interpolazione.
-  %f = Vettore colonna contenente i valori della funzione nelle ascisse d'interpolazione.
-  %Output:
-  %f = Differenze divise calcolate.
-  %Calcola le differenze divise
-  n = (length(f)/2)-1;
-  
-  for i = 2*n+1:-2:3
-      f(i) = (f(i)-f(i-2))/(x(ceil(i/2))-x(ceil((i-1)/2)));
-  end
-  for j = 2:2*n+1
-      for i = (2*n+2):-1:j+1
-          f(i) = (f(i)-f(i-1))/(x(ceil(i/2))-x(ceil((i-j)/2)));
-      end
-  end
-  return;
-  end
+function f = differenze_divise(x, f)
+%f = differenze_divise(x, f)
+%Input:
+%x = Vettore colonna contenente le ascisse d'interpolazione.
+%f = Vettore colonna contenente i valori della funzione nelle ascisse d'interpolazione.
+%Output:
+%f = Differenze divise calcolate.
+%Calcola le differenze divise
+n = (length(f)/2)-1;
+ 
+for i = 2*n+1:-2:3
+    f(i) = (f(i)-f(i-2))/(x(ceil(i/2))-x(ceil((i-1)/2)));
+end
+for j = 2:2*n+1
+    for i = (2*n+2):-1:j+1
+        f(i) = (f(i)-f(i-1))/(x(ceil(i/2))-x(ceil((i-j)/2)));
+    end
+end
+return;
+end
 \end{lstlisting}
 
 Simile alla \textit{function} precedente, solamente che qui si sono utilizzate
 anche le derivate prime della funzione che deve essere interpolata.
-
 
 \section{
 Costruire una function Matlab che, specificato in ingresso il grado n del polinomio
@@ -1340,142 +1346,142 @@ lenta rispetto le prime.
   \textit{not-a-knot} (default).
  }
 \begin{lstlisting}[style=Matlab-editor]
-  function yy = myspline(xi, fi, xx, type)
-  %yy = myspline(xi, fi, xx, type)
-  %Input:
-  %xi = Valori delle ascisse.
-  %fi = Valori della funzione calcolati nelle ascisse.
-  %xx = Vettore contenente le ascisse a cui voglio approssimare la funzione.
-  %type = Tipologia per risolvere l'esercizio.
-  %Output:
-  %yy = Spline calcolata.
-  %Calcola la spline cubica interpolante naturale oppure la not-a-knot, a
-  %seconda del valore di type.
+function yy = myspline(xi, fi, xx, type)
+%yy = myspline(xi, fi, xx, type)
+%Input:
+%xi = Valori delle ascisse.
+%fi = Valori della funzione calcolati nelle ascisse.
+%xx = Vettore contenente le ascisse a cui voglio approssimare la funzione.
+%type = Tipologia per risolvere l'esercizio.
+%Output:
+%yy = Spline calcolata.
+%Calcola la spline cubica interpolante naturale oppure la not-a-knot, a
+%seconda del valore di type.
   
-  if nargin < 4
-      error("Il numero degli argomenti e' errato." + newline + "Riprovare.");
-  elseif length(xi) ~= length(fi)
-      error("La lunghezza dei due vettori non corrisponde." + newline + "Riprovare.");
-  elseif length(xi) ~= length(unique(xi))
-      error("Le ascisse di interpolazione non sono distinte tra loro." + newline + "Riprovare.");
-  elseif size(xi, 2) > 1 || size(fi, 2) > 1
-      error("Non e' stato inserito un vettore colonna correttamente." + newline + "Riprovare.")
-  elseif isempty(xx)
-      error("La partizione assegnata e' vuota." + newline + "Riprovare.");
-  end
+if nargin < 4
+    error("Il numero degli argomenti e' errato." + newline + "Riprovare.");
+elseif length(xi) ~= length(fi)
+    error("La lunghezza dei due vettori non corrisponde." + newline + "Riprovare.");
+elseif length(xi) ~= length(unique(xi))
+    error("Le ascisse di interpolazione non sono distinte tra loro." + newline + "Riprovare.");
+elseif size(xi, 2) > 1 || size(fi, 2) > 1
+    error("Non e' stato inserito un vettore colonna correttamente." + newline + "Riprovare.")
+elseif isempty(xx)
+    error("La partizione assegnata e' vuota." + newline + "Riprovare.");
+end
   
-  n = length(xi) - 1;
-  epsilon = zeros(n-1,1); %Vettore sovradiagonale
-  q = zeros(n-1,1); %Vettore sottodiagonale
+n = length(xi) - 1;
+epsilon = zeros(n-1,1); %Vettore sovradiagonale
+q = zeros(n-1,1); %Vettore sottodiagonale
+
+for i = 2 : n
+    hi = (xi(i) - xi(i-1));
+    hi1 = (xi(i+1) - xi(i));
+    q(i-1) = hi / (hi + hi1);
+    epsilon(i-1) = hi1 / (hi + hi1);
+end
   
-  for i = 2 : n
-      hi = (xi(i) - xi(i-1));
-      hi1 = (xi(i+1) - xi(i));
-      q(i-1) = hi / (hi + hi1);
-      epsilon(i-1) = hi1 / (hi + hi1);
-  end
+diff_div = diff_div_spline(xi, fi); %Calcolo le differenze divise
   
-  diff_div = diff_div_spline(xi, fi); %Calcolo le differenze divise
+a = 2*ones(n-1,1);
+if type == 0
+    m = tridia(a, q, epsilon, diff_div * 6);
+    m = [0; m; 0];
+else
+    a(1) = 2 - q(1);
+    epsilon(1) = epsilon(1) - q(1);
+    diff_div(1) = (1 - q(1)) * diff_div(1);
+    q(1) = 0;
+
+    a(n-1) = 2 - epsilon(n-1);
+    q(n-1) = q(n-1) - epsilon(n-1);
+    diff_div(n-1) = (1 - epsilon(n-1)) * diff_div(n-1);
+    epsilon(n-1) = 0;
   
-  a = 2*ones(n-1,1);
-  if type == 0
-      m = tridia(a, q, epsilon, diff_div * 6);
-      m = [0; m; 0];
-  else
-      a(1) = 2 - q(1);
-      epsilon(1) = epsilon(1) - q(1);
-      diff_div(1) = (1 - q(1)) * diff_div(1);
-      q(1) = 0;
+    m = tridia(a, q, epsilon, diff_div * 6);
   
-      a(n-1) = 2 - epsilon(n-1);
-      q(n-1) = q(n-1) - epsilon(n-1);
-      diff_div(n-1) = (1 - epsilon(n-1)) * diff_div(n-1);
-      epsilon(n-1) = 0;
+    m0 = diff_div(1) - m(1) - m(2);
+    mn =  diff_div(n-1) - m(n-1) - m(n-2);
+    m = [m0; m; mn];
+end
   
-      m = tridia(a, q, epsilon, diff_div * 6);
+yy = calcola_punti(xi, fi, m, xx);
+return;
+end
   
-      m0 = diff_div(1) - m(1) - m(2);
-      mn =  diff_div(n-1) - m(n-1) - m(n-2);
-      m = [m0; m; mn];
-  end
+function diff_div = diff_div_spline(xi, fi)
+%diff_div = diffdivspline(xi, fi)
+%Input:
+%xi = Valori delle ascisse.
+%fi = Valori della funzione calcolati nelle ascisse.
+%Output:
+%diff_div = Differenze divise calcolate.
+%Calcola le differenze divise per la spline
+ 
+n = size(xi);
+diff_div = fi;
+n = n-1;
+for j = 1 : 2
+    for i = n+1 : -1 : j+1
+        diff_div(i) = (diff_div(i) - diff_div(i-1))/(xi(i) - xi(i-j));
+    end
+end
+diff_div = diff_div(3:n+1);
+return;
+end
   
-  yy = calcola_punti(xi, fi, m, xx);
-  return;
-  end
+function x = tridia(a, b, c, g)
+%x = tridia(a, b, c, g)
+%Input:
+%a = Vettore diagonale principale.
+%b = Vettore sovradiagonale.
+%c = Vettore sottodiagonale.
+%g = Vettore dei termini noti.
+%Output:
+%x = Vettore soluzione
+%Risoluzione di un sistema tridiagonale.
   
-  function diff_div = diff_div_spline(xi, fi)
-  %diff_div = diffdivspline(xi, fi)
-  %Input:
-  %xi = Valori delle ascisse.
-  %fi = Valori della funzione calcolati nelle ascisse.
-  %Output:
-  %diff_div = Differenze divise calcolate.
-  %Calcola le differenze divise per la spline
+n = length(g);
+x = g;
+for i = 1 : n-1
+   b(i) = b(i)/a(i);
+   a(i+1) = a(i+1) - b(i)*c(i);
+   x(i+1) = x(i+1) - b(i)*x(i);
+end
   
-  n = size(xi);
-  diff_div = fi;
-  n = n-1;
-  for j = 1 : 2
-      for i = n+1 : -1 : j+1
-          diff_div(i) = (diff_div(i) - diff_div(i-1))/(xi(i) - xi(i-j));
-      end
-  end
-  diff_div = diff_div(3:n+1);
-  return;
-  end
+x(n) = x(n)/a(n);
+for i = n-1 : -1 : 1
+  x(i) = (x(i) - c(i)*x(i+1))/a(i);
+end
+return;
+end
   
-  function x = tridia(a, b, c, g)
-  %x = tridia(a, b, c, g)
-  %Input:
-  %a = Vettore diagonale principale.
-  %b = Vettore sovradiagonale.
-  %c = Vettore sottodiagonale.
-  %g = Vettore dei termini noti.
-  %Output:
-  %x = Vettore soluzione
-  %Risoluzione di un sistema tridiagonale.
+function yy = calcola_punti(xi, fi, m, xx)
+%yy = calcola_punti(xi, fi, m, xx)
+%Input:
+%xi = Valori delle ascisse.
+%fi = Valori della funzione calcolati nelle ascisse.
+%m = Matrice dei coefficienti.
+%xx = Partizione assegnata.
+%Output:
+%yy = Valori della spline.
+%Calcola i valori della spline nei punti definiti in xx.
   
-  n = length(g);
-  x = g;
-  for i = 1 : n-1
-     b(i) = b(i)/a(i);
-     a(i+1) = a(i+1) - b(i)*c(i);
-     x(i+1) = x(i+1) - b(i)*x(i);
-  end
-  
-  x(n) = x(n)/a(n);
-  for i = n-1 : -1 : 1
-     x(i) = (x(i) - c(i)*x(i+1))/a(i);
-  end
-  return;
-  end
-  
-  function yy = calcola_punti(xi, fi, m, xx)
-  %yy = calcola_punti(xi, fi, m, xx)
-  %Input:
-  %xi = Valori delle ascisse.
-  %fi = Valori della funzione calcolati nelle ascisse.
-  %m = Matrice dei coefficienti.
-  %xx = Partizione assegnata.
-  %Output:
-  %yy = Valori della spline.
-  %Calcola i valori della spline nei punti definiti in xx.
-  
-  yy = zeros(length(xx), 1);
-  
-  for j = 1 : length(xx)
-      for i = 2 : length(xi) 
-          if((xx(j) >= xi(i-1) && xx(j) <= xi(i)) || xx(j) < xi(1))
-              hi = xi(i)-xi(i-1);
-              ri = fi(i-1)-hi^2/6*m(i-1);
-              qi = (fi(i)-fi(i-1))/hi-hi/6*(m(i)-m(i-1));
-              yy(j) =((xx(j)-xi(i-1))^3*m(i)+(xi(i)-xx(j))^3*m(i-1))/(6*hi)+qi*(xx(j)-xi(i-1))+ri;
-              break
-          end
-      end
-  end
-  return;
-  end
+yy = zeros(length(xx), 1);
+ 
+for j = 1 : length(xx)
+    for i = 2 : length(xi) 
+        if((xx(j) >= xi(i-1) && xx(j) <= xi(i)) || xx(j) < xi(1))
+            hi = xi(i)-xi(i-1);
+            ri = fi(i-1)-hi^2/6*m(i-1);
+            qi = (fi(i)-fi(i-1))/hi-hi/6*(m(i)-m(i-1));
+            yy(j) =((xx(j)-xi(i-1))^3*m(i)+(xi(i)-xx(j))^3*m(i-1))/(6*hi)+qi*(xx(j)-xi(i-1))+ri;
+            break
+        end
+    end
+end
+return;
+end
 \end{lstlisting}
 
 \section{
@@ -1487,7 +1493,7 @@ Utilizzare 10001 punti equispaziati nell'intervallo $ [-5,5] $ per ottenere la s
 }
 Di seguito viene riportato il grafico dell'andamento dell'errore do approssimazione, utilizzando
 le \textit{spline} interpolanti naturale e \textit{not-a-knot}, per approssimare la funzione di 
-Runge nell'intervallo desiderato
+Runge nell'intervallo desiderato.
 \\
 \includegraphics*[scale=0.80]{./esercizi/imgs/grafico_23.pdf}
 
@@ -1511,7 +1517,33 @@ DA FINIRE
   dratura della formula di Newton-Cotes di grado \textit{n}. Tabulare, quindi, i pesi delle formule di grado
   1, 2,. . . , 7 e 9 (come \underline{numeri razionali}).
  }
-DA FINIRE
+\begin{lstlisting}[style=Matlab-editor]
+function coefficienti = coefficienti_newton_cotes(n)
+%coefficienti = coefficienti_newton_cotes(n)
+%Input:
+%n = Grado della formula di Newton-Cotes.
+%Output:
+%coefficienti = Coefficienti della formula di Newton-Cotes.
+%Restituisce i pesi della quadratura della formula di Newton-Cotes di grado n.
+  
+if n <= 0, error("Il grado deve essere positivo." + newline + "Riprovare."), end
+  
+coefficienti = zeros(n, 1);
+  
+for i = 0 : n
+    k = [0:i-1 i+1: n];
+    denominatore = prod(i-k);
+    p = poly(k);
+    p = [p ./ (n+1:-1:1) 0];
+    numeratore = polyval(p, n);
+    coefficienti(i+1) = numeratore/denominatore;
+end
+  
+return;
+end
+\end{lstlisting}
+
+INSERIRE I DATI
 
 \section{
   Scrivere una function Matlab,

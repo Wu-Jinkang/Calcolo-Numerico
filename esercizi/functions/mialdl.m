@@ -27,10 +27,12 @@ function LDLt = fattLDLt(A)
 % -D = Matrice diagonale.
 %Esegue la fattorizzazione LDL^t.
 
-n = size(A);
 LDLt = A;
 if(LDLt(1, 1) <= 0), error("La matrice non e' sdp." + newline + "Riprovare."), end
+
+n = size(A);
 LDLt(2:n, 1) = LDLt(2:n, 1)/LDLt(1, 1);
+
 for i = 2:n
     v = (LDLt(i, 1:i-1).').*diag(LDLt(1:i-1, 1:i-1));
     LDLt(i, i) = LDLt(i, i) - LDLt(i, 1:i-1)*v;
