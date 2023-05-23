@@ -4,6 +4,7 @@
 \usepackage{multirow}
 \usepackage{longtable}
 \usepackage{graphicx}
+\usepackage{setspace}
 
 \titleformat*{\section}{\large\bfseries}
 
@@ -1543,7 +1544,28 @@ return;
 end
 \end{lstlisting}
 
-INSERIRE I DATI
+Di seguito viene riportata la tabella contente i pesi calcolati, per ogni grado della formula.
+\\
+\begin{center}
+  \begin{spacing}{1.5}
+  \begin{longtable}{ |p{0.2cm}|p{8cm}| }
+    \hline
+    \multicolumn{2}{|c|}{ \textbf{Dati - Tabella di confronto}} \\
+    \hline
+    \textbf{n}     & \textbf{Pesi} \\
+    \hline
+    1 & $ \frac{1}{2}, \frac{1}{2} $ \\
+    2 & $ \frac{1}{3}, \frac{4}{3}, \frac{1}{3} $ \\
+    3 & $ \frac{3}{8}, \frac{9}{8}, \frac{9}{8}, \frac{3}{8} $ \\
+    4 & $ \frac{14}{45}, \frac{64}{45}, \frac{8}{15}, \frac{64}{45}, \frac{14}{45} $ \\
+    5 & $ \frac{95}{288}, \frac{125}{96}, \frac{125}{144}, \frac{125}{144}, \frac{125}{96}, \frac{95}{288} $ \\
+    6 & $ \frac{41}{140}, \frac{54}{35}, \frac{27}{140}, \frac{68}{35}, \frac{27}{140}, \frac{54}{35}, \frac{41}{140}, $ \\
+    7 & $ \frac{1073}{3527}, \frac{810}{559}, \frac{343}{640}, \frac{649}{536}, \frac{649}{536}, \frac{343}{640}, \frac{810}{559}, \frac{1073}{3527} $ \\
+    9 & $ \frac{130}{453}, \frac{1374}{869}, \frac{243}{2240}, \frac{5287}{2721}, \frac{704}{1213}, \frac{704}{1213}, \frac{5594}{2879}, \frac{243}{2240}, \frac{1374}{869}, \frac{130}{453} $ \\
+    \hline
+  \end{longtable}
+\end{spacing}
+\end{center}
 
 \section{
   Scrivere una function Matlab,
