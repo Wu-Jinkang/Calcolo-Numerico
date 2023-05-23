@@ -6,7 +6,7 @@ function coefficienti = coefficienti_newton_cotes(n)
 %coefficienti = Coefficienti della formula di Newton-Cotes.
 %Restituisce i pesi della quadratura della formula di Newton-Cotes di grado n.
 
-if n <= 0, error("Il grado deve essere positivo." + newline + "Riprovare."), end
+if n <= 0 || n == 8 || n > 9, error("Il grado del polinomio deve essere compreso tra 1 e 7 oppure uguale a 9." + newline +  "Riprovare."), end
 
 coefficienti = zeros(n, 1);
 

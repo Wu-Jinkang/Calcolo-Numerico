@@ -16,69 +16,24 @@ if m ~= k, error("La dimensione della matrice e quella dei termini noti sono dif
 
 if(size(b,2) > 1),error("Non e' stato inserito un vettore dei termini noti corretto." + newline + "Riprovare."),end
 
-QR = QRfatt(A); %Fattorizzo A tramite la fattorizzazione QR di Householder
-[x,nr] = QRsolve(QR,b); %Risolvo il sistema
+for i = 1:n
+    alfa = norm(A(i:m, i));
+    if alfa == 0, error("La matrice non e' ha rango massimo." + newline + "Riprovare."), end
+    if A(i,i) >= 0, alfa = -alfa; end   
+    v1 = A(i,i) - alfa;
+    A(i,i) = alfa;
+    A(i+1:m, i) = A(i+1:m, i) / v1; %Vettore normalizzato
+    beta = -v1 / alfa;
+    A(i:m, i+1:n) = A(i:m, i+1:n) - (beta * [1; A(i+1:m, i)]) * ([1 A(i+1:m, i)'] * A(i:m, i+1:n));
+    b(i:m) = b(i:m) - (beta * [1 A(i+1:m, i)'] * b(i:m)) * [1; A(i+1:m, i)];
+end  
+
+%Risolvo il sistema Ax=b
+x = b(:);
+for i = n:-1:1   
+    x(i) = x(i) / A(i,i);
+    x(1:i-1) = x(1:i-1)   - A(1:i-1, i) * x(i);
+end  
+nr = norm(x(n+1:m)); 
 return;
-end
-
-function QR = QRfatt(A)
-%QR = QRfatt(A)
-%Input: 
-%A = Matrice sovradimensionata a rango massimo.
-%Output: 
-%QR = Matrice A fattorizzata QR di Householder.
-%Esegue la fattorizzazione QR della matrice.
-
-[m, n] = size(A);
-norma_euclidea = norm(A);
-QR = A;
-for i = 1:n
-    alfa = norm(QR(i : m, i));
-    if abs(alfa)<=eps*norma_euclidea, error("La matrice non ha rango massimo." + newline + "Riprovare."),end
-    if QR(i,i)>=0, alfa =-alfa; end
-    v1 = QR(i,i)-alfa;
-    QR(i,i) = alfa;
-    QR(i+1:m,i) = QR(i+1:m,i)/v1; %Vettore normalizzato
-    beta = -v1/alfa;
-    QR(i:m,i+1:n) = QR(i: m,i+1:n)-(beta*[1;QR(i+1:m,i)])*([1 QR(i+1:m,i)']*QR(i:m,i+1:n));
-end
-end
-
-function [x, norma_euclidea] = QRsolve(QR, b)
-%[x, norma_euclidea] = QRsolve(QR, b)
-%Input: 
-%QR = Matrice QR di Householder
-%b = Vettore dei termini noti
-%Output: 
-%x = Soluzione del sistema
-%norma_euclidea = Norma euclidea del vettore residuo
-%Risolve il sistema QRx = b e ritorna la norma euclidea del vettore residuo.
-
-x = b;
-[m, n] = size(QR);
-for i = 1:n
-    v = [1; QR(i+1:m,i)];
-    x(i:m) = x(i:m)-((2*(v*v'))/(v'*v))*x(i:m);
-end
-x(1:n) = Usolve(QR(1:n , 1 : n), x(1 : n));
-norma_euclidea = norm(x(n+1:m)); %Del vettore residuo
-x=x(1:n);
-end
-
-function b = Usolve(U, b)
-%b = Usolve(U, b)
-%Input: 
-%U = Matrice quadrata triangolare superiore.
-%b = Vettore dei termini noti.
-%Output: 
-%x = Soluzione del sistema.
-%Risolve il sistema Ux = b.
-
-n = size(U,1);
-for i = n:-1:1
-    if(n > 1)    
-        b(i) = b(i)-U(i, i+1:n)*b(i+1:n);
-    end
-    b(i) = b(i)/U(i,i);
-end
 end

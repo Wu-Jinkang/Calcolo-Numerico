@@ -15,11 +15,13 @@ if a >= b, error("L'intervallo e' stato inserito in maniera non corretta." + new
 if k <= 0, error("Il grado del polinomio deve essere positivo." + newline + "Riprovare."), end
 if n <= 0, error("Il numero delle ascisse non e' corretto."+ newline + "Riprovare."), end
 
-u = 1;
+mu = 1;
 if mod(n, 2) ~= 0, error("Il numero delle ascisse non e' un multiplo pari di k." + newline + "Riprovare.");
 else 
-    u = 2;
+    mu = 2;
 end
+
+
 
 %GUARDA BILIOT
 
