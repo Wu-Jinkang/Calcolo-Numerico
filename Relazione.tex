@@ -100,7 +100,7 @@ return;
 end
 \end{lstlisting}
 \begin{center}
-  \begin{tabular}{ |p{2.7cm}||p{2.7cm}|p{2.7cm}| }
+  \begin{tabular}{ |p{2.7cm}|p{2.7cm}|p{2.7cm}| }
     \hline
     \multicolumn{3}{|c|}{ \textbf{Dati - Tabella di confronto}} \\
     \hline
@@ -260,8 +260,7 @@ le \textit{Iterazioni} e \textit{Valutazioni funzionali}.
     \hline
     \multicolumn{10}{|c|}{\textbf{Dati - Tabella di confronto}}                                                                                                                                                               \\
     \hline
-    \multicolumn{3}{|c|}{\textbf{Newton}} & \multicolumn{3}{|c|}{\textbf{Secanti}} & \multicolumn{3}{|c|}{\textbf{Newton mod.}}
-                                          & \multicolumn{1}{c|}{\textbf{//}}                                                                                                                                                  \\
+    \multicolumn{3}{|c|}{\textbf{Newton}} & \multicolumn{3}{|c|}{\textbf{Secanti}} & \multicolumn{3}{|c|}{\textbf{Newton mod.}} & \multicolumn{1}{c|}{\textbf{//}}                                                                                                                                                  \\
     \hline
     \multicolumn{1}{|c|}{\textbf{Radice}} & \multicolumn{1}{|c|}{\textbf{It.}}     & \multicolumn{1}{|c|}{\textbf{V.f.}}
                                           & \multicolumn{1}{|c|}{\textbf{Radice}}  & \multicolumn{1}{|c|}{\textbf{It.}}         & \multicolumn{1}{|c|}{\textbf{V.f.}}
@@ -1447,7 +1446,7 @@ Di seguito viene riportato il grafico dell'andamento dell'errore do approssimazi
 le \textit{spline} interpolanti naturale e \textit{not-a-knot}, per approssimare la funzione di 
 Runge nell'intervallo desiderato.
 \\
-\includegraphics*[scale=0.80]{./esercizi/imgs/grafico_23.pdf}
+\includegraphics*[scale=0.80]{} METTERE GRAFICO 23
 
 
 \section{
@@ -1534,7 +1533,49 @@ Di seguito viene riportata la tabella contente i pesi calcolati, per ogni grado 
   \\
   \textbullet \textbf{err} e' la stima dell'errore di quadratura.
  }
-DA FINIRE
+\begin{lstlisting}[style=Matlab-editor]
+function [If, err] = composita(fun, a, b, k, n)
+%[If, err] = composita(fun, a, b, k, n)
+%Input:
+%fun = Identificatore function della funzione integranda
+%a,b = Estremi dell'intervallo di integrazione.
+%k = Grado del polinomio
+%n = Numero delle ascisse.
+%Output:
+%If = Approssimazione dell'integrale ottenuta.
+%err = Stima dell'errore di quadratura.
+%Calcolo della formula composita di Newton-Cotes di grado k u n+1 ascisse
+%equidistanti, con n multiplo pari di k.
+
+if a >= b, error("L'intervallo e' stato inserito in maniera non corretta." + newline + "Riprovare."), end
+if k <= 0, error("Il grado del polinomio deve essere positivo." + newline + "Riprovare."), end
+if n <= 0, error("Il numero delle ascisse non e' corretto."+ newline + "Riprovare."), end
+if mod(n, 2) ~= 0, error("Il numero delle ascisse non e' un multiplo pari di k." + newline + "Riprovare."), end
+
+mu = 1;
+if mod(n, 2) ~= 0
+  mu = 2;
+end
+
+coefficienti = coefficienti_newton_cotes(k);
+h = (b-a)/n;
+
+If = 0;
+I1 = 0;
+for i = 0:n-1
+  x = linspace(a + i*h, a + (i+1)*h, k+1);
+  fx = feval(fun, x);
+  If = If + (h/k)*sum(fx.*coefficienti);
+  if mod(i,2) == 0
+      I1 = I1 + (h/(2*k))*sum(fx.*coefficienti);
+  end
+end
+
+err = abs(If-I1)/(2^(k+mu)-1);
+
+return;
+end
+\end{lstlisting}
 
 \section{
 Utilizzare la function \textbf{composita} per ottenere l'approssimazione dell'integrale
@@ -1543,16 +1584,33 @@ $$
   (\sum_{i=1}^{5} i \cos 2 \pi ix - e^i \sin 2(\pi i + 0.1)x)
   \, dx
 $$
-con le formule composite di Newton-Cotes di grado \textbf{k=1,2,3,4,5,6}. Per tutte, utilizzare \textbf{n=12}.
+con le formule composite di Newton-Cotes di grado \textbf{k=1,2,3,6}. Per tutte, utilizzare \textbf{n=12}.
 }
-DA FINIRE
+
+Di seguito e' riportata la tabella dei dati, riguardanti le approssimazioni di \textbf{If}
+e le stime degli errori, per i valori di \textbf{k} forniti dall'esercizio.
+\\
+\begin{center}
+  \begin{tabular}{ |p{3.7cm}|p{3cm}|p{0.5cm}| }
+    \hline
+    \multicolumn{3}{|c|}{ \textbf{Tabella dei dati}} \\
+    \hline
+    \textbf{If} & \textbf{Errore} & \textbf{k}      \\
+    \hline
+    -0.0925980476169039 & 0.184019370137441 & 1 \\
+    -0.179803240495078  & 0.188624769819435 & 2 \\
+    -0.17847075804203  & 0.0871853736641679 & 3 \\
+    -0.17744651109262 & 0.0102213795366299 & 6 \\
+    \hline
+  \end{tabular}
+\end{center}
 
 \section{
   Implementare la formula composita adattativa di Simpson.
  }
 \begin{lstlisting}[style=Matlab-editor]
-function I2 = adapsim(a, b, f, tol, fa, f1, fb)
-%I2 = adapsim(a, b, f, tol, fa, f1, fb)
+function [I2, nvalfunz] = adapsim(a, b, f, tol, fa, f1, fb)
+%[I2, nvalfunz] = adapsim(a, b, f, tol, fa, f1, fb)
 %Input:
 %a,b = Estremi dell'intervallo.
 %f = Funzione integranda.
@@ -1562,87 +1620,109 @@ function I2 = adapsim(a, b, f, tol, fa, f1, fb)
 %fb = Funzione calcolata nell'estremo b.
 %Output:
 %I2 = Approssimazione calcolata.
+%nvalfunz = Numero di valutazioni funzionali.
 %Calcola l'approssimazione dell'integrale mediante la formula adattiva Simpson.
-
-if tol <=0, error("La tolleranza deve essere positiva." + newline + "Riprovare."), end
-if a >=b, error("L'intervallo e' stato inserito in maniera non corretta." + newline + "Riprovare."), end
+  
+if tol <= 0, error("La tolleranza deve essere positiva." + newline + "Riprovare."), end
+if a >= b, error("L'intervallo e' stato inserito in maniera non corretta." + newline + "Riprovare."), end
+  
 x1 = (a+b)/2;
+nvalfunz = 0;
 if nargin <= 4
     fa = feval(f, a);
     f1 = feval(f, x1);
     fb = feval(f, b);
+    nvalfunz = nvalfunz + 3;
 end
+  
 h = (b-a)/6;
+  
 x2 = (a+x1)/2;
 x3 = (x1+b)/2;
+  
 f2 = feval(f, x2);
 f3 = feval(f, x3);
+nvalfunz = nvalfunz + 2;
+  
 I1 = h * (fa + 4*f1 + fb);
-I2 = .5 * h * (fa + 4*f1 + 2*f2 + 4*f3 + fb);
-err = (abs(I2 - I1))/15;
+I2 = (h/2) * (fa + 4*f2 + 2*f1 + 4*f3 + fb);
+err = abs(I2 - I1)/15;
+  
 if err > tol
-    I2 = adapsim(a, x1, f, tol/2, fa, f2, f1) + adapsim(x1, b, f, tol/2, f1, f3, fb);
+    [I2s, nvalfunzs] = adapsim(a, x1, f, tol/2, fa, f2, f1);
+    [I2d, nvalfunzd] = adapsim(x1, b, f, tol/2, f1, f3, fb);
+    I2 = I2s + I2d;
+    nvalfunz = nvalfunz + nvalfunzs + nvalfunzd;
 end
 return;
-end  
+end
 \end{lstlisting}
 
 \section{
   Implementare la formula composita adattativa di Newton-Cotes di grado \textbf{k=4}.
  }
 \begin{lstlisting}[style=Matlab-editor]
-  function [I, err] = newton_cotes_adaptive(f, a, b, tol)
-  %[I, err] = newton_cotes_adaptive(f, a, b, tol)
-  %Input:
-  %f = Funzione da integrare.
-  %a,b = Estremi dell'intervallo di integrazione.
-  %tol = Tolleranza relativa.
-  %Output:
-  %I = Stima calcolata.
-  %err = Errore relativo.
-  %Calcola la formula composita adattativa di Newton-Cotes di grado k=4
-  % su ogni sottointervallo dell'intervallo [a,b] fino a quando la stima
-  % dell'errore relativo e' inferiore alla tolleranza relativa tol.
-  
-  n = 1;
-  h = (b-a)/n;
-  x = linspace(a, b, n + 1);
-  y = feval(f, x);
-  I = h/2 * (y(1) + y(end) + 2*sum(y(2:end-1)));
-  
-  while true
-      % Calcola la stima dell'errore relativo
-      err = abs(I - newton_cotes_adaptive_helper(f, a, b, n*2))/abs(I);
-      
-      % Se l'errore e' inferiore alla tolleranza relativa, restituisci il risultato
-      if err < tol
-          return;
-      end
-      
-      % Altrimenti, raddoppia il numero di sottointervalli e ripeti il calcolo
-      n = n*2;
-      h = (b-a)/n;
-      x = linspace(a, b, n + 1);
-      y = f(x);
-      I = h/2*(y(1) + y(end) + 2*sum(y(2:end-1)));
-  end
-  
-  function I = newton_cotes_adaptive_helper(f, a, b, n)
-  %I = newton_cotes_adaptive_helper(f, a, b, n)
-  %Input:
-  %f = Funzione da integrare.
-  %a,b = Estremi dell'intervallo di integrazione.
-  %tol = Tolleranza relativa.
-  %Output:
-  %I = Stima calcolata.
-  % Calcola la formula composita adattativa di Newton-Cotes di grado k=4
-  % su ogni sottointervallo dell'intervallo [a,b] senza verificare la tolleranza.
-  
-  h = (b-a)/n;
-  x = linspace(a, b, n + 1);
-  y = f(x);
-  I = h/2*(y(1) + y(end) + 2*sum(y(2:end-1)));
-  end
+function [I2, nvalfunz] = composita_adattiva_newton_cotes_4(a, b, f, tol, fa, fm, f2, f3, fb)
+%[I2, nvalfunz] = composita_adattiva_newton_cotes_4(a, b, f, tol, fa, fm, f2, f3, fb)
+%Input:
+%a,b = Estremi dell'intervallo.
+%f = Funzione integranda.
+%tol = Tolleranza massima.
+%fa = Funzione calcolata nell'estremo a.
+%fm = Funzione calcolata nel punto medio.
+%f2 = Funzione calcolata nel punto compreso tra l'estremo sinistro ed il punto medio. 
+%f3 = Funzione calcolata nel punto compreso tra il punto medio e l'estremo
+%destro
+%fb = Funzione calcolata nell'estremo b.
+%Output:
+%I2 = Approssimazione calcolata.
+%nvalfunz = Numero di valutazioni funzionali.
+%
+
+if tol <= 0, error("La tolleranza deve essere positiva." + newline + "Riprovare."), end
+if a >= b, error("L'intervallo e' stato inserito in maniera non corretta." + newline + "Riprovare."), end
+
+xm = (a+b)/2;
+x2 = (a+xm)/2;
+x3 = (xm+b)/2;
+
+nvalfunz = 0;
+if nargin <= 4
+    fa = feval(f, a);
+    fb = feval(f, b);
+    fm = feval(f, xm);
+    f2 = feval(f, x2);
+    f3 = feval(f, x3);
+    nvalfunz = nvalfunz + 5;
+end
+
+h = (b-a)/90;
+
+I1 = h * (7*fa + 32*f2 + 12*fm + 32*f3 + 7*fb);
+
+x4 = (a + x2)/2;
+x5 = (x2 + xm)/2;
+x6 = (xm + x3)/2;
+x7 = (x3 + b)/2;
+
+f4 = feval(f, x4);
+f5 = feval(f, x5);
+f6 = feval(f, x6);
+f7 = feval(f, x7);
+nvalfunz = nvalfunz + 4;
+
+I2 = h/2 * (7*fa + 32*f4 + 12*f2 + 32*f5 + 14*fm + 32*f6 + 12*f3 + 32*f7 + 7*fb);
+
+err = abs(I2-I1)/63;
+
+if err > tol
+    [I2s, nvalfunzs] = composita_adattiva_newton_cotes_4(a, xm, f, tol/2, fa, f2, f4, f5, fm);
+    [I2d, nvalfunzd] = composita_adattiva_newton_cotes_4(xm, b, f, tol/2, fm, f3, f6, f7, fb);
+    I2 = I2s + I2d; 
+    nvalfunz = nvalfunz + nvalfunzs + nvalfunzd;
+end
+return;
+end
 \end{lstlisting}
 
 \section{
@@ -1657,5 +1737,29 @@ end
   Costruire un'altra tabella, in cui si tabula l'errore vero (essendo l'integrale noto, in questo caso)
   rispetto a \textbf{tol}.
  }
-DA FINIRE
+ Di seguito viene riportata la tabella di confronto dei dati, 
+ con l'approssimazione dell'integrale ed il relativo numero di valutazioni funzionali, per ogni tolleranza richiesta. 
+
+ \begin{center}
+  \setlength\tabcolsep{2pt}
+  \begin{tabular}{|p{3.6cm} | p{1cm} | p{3.6cm} | p{1cm} | p{1cm}|}
+    \hline
+    \multicolumn{5}{|c|}{\textbf{Dati - Tabella di confronto}}  \\                                                                                                                                 
+    \hline
+    \multicolumn{2}{|c|}{\textbf{Simpson}} & \multicolumn{2}{|c|}{\textbf{Newton-Cotes}} & \multicolumn{1}{c|}{\textbf{//}} \\                                                                           
+    \hline
+    \multicolumn{1}{|c|}{\textbf{I2}} & \multicolumn{1}{|c|}{\textbf{Num. val. funz.}} & \multicolumn{1}{|c|}{\textbf{I2}} &
+     \multicolumn{1}{|c|}{\textbf{Num. val. funz.}}  & \multicolumn{1}{|c|}{\textbf{Tol.}} \\
+    \hline
+    0.000293528025694378 & 201 & 2.30517976296252e-06 & 153 & 1e-2 \\
+    0.000457223923411743 & 333 & 1.06536073019026e-06 & 193 & 1e-3 \\
+    2.63547596144331e-05 & 605 & 9.8526042879854e-10 & 257 & 1e-4 \\
+    2.34481367566985e-06 & 1061 & 3.10416783644296e-06 & 369 & 1e-5 \\
+    3.0076262513834e-07 & 1869 & 3.6973281103414e-08 & 553 & 1e-6 \\
+    3.65647581102024e-08 & 3277 & 2.28150851544484e-08 & 793 & 1e-7 \\
+    3.21109816514564e-09 & 5921 & 2.13358375411588e-09 & 1177 & 1e-8 \\
+    3.09839487400154e-10 & 10589 & 1.49663170745384e-10 & 1753 & 1e-9 \\
+    \hline
+\end{tabular}
+\end{center}
 \end{document}

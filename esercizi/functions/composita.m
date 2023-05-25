@@ -25,14 +25,17 @@ coefficienti = coefficienti_newton_cotes(k);
 h = (b-a)/n;
 
 If = 0;
+I1 = 0;
 for i = 0:n-1
-    I1 = If;
     x = linspace(a + i*h, a + (i+1)*h, k+1);
     fx = feval(fun, x);
-    If = If + h/k*sum(fx.*coefficienti);
+    If = If + (h/k)*sum(fx.*coefficienti);
+    if mod(i,2) == 0
+        I1 = I1 + (h/(2*k))*sum(fx.*coefficienti);
+    end
 end
 
-err = abs(If-I1)/(2^(n+mu)+1);
+err = abs(If-I1)/(2^(k+mu)-1);
 
 return;
 end
