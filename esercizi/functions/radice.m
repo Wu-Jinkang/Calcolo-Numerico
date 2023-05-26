@@ -1,7 +1,7 @@
 function rad = radice(x)
 %rad = radice(x)
 %Input: 
-$x = Numero di cui si vuole conoscere la radice sesta
+%x = Numero di cui si vuole conoscere la radice sesta
 %Output:
 %rad = Radice sesta calcolata
 %Restituisce la radice sesta del numero passato in input.

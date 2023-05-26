@@ -79,7 +79,7 @@ tabulando i risultati in modo che si possa verificare che si e' ottenuta la mass
 function rad = radice(x)
 %rad = radice(x)
 %Input: 
-$x = Numero di cui si vuole conoscere la radice sesta
+%x = Numero di cui si vuole conoscere la radice sesta
 %Output:
 %rad = Radice sesta calcolata
 %Restituisce la radice sesta del numero passato in input.
@@ -219,7 +219,6 @@ if abs(x-x0)>tol*(1+abs(x0)),error("Il metodo non converge." + newline + "Riprov
   della radice della funzione $$ f(x) = x - cos(x), $$ per \textit{tol} = $ 10^{-3}, 10^{-6}, 10^{-9}, 10^{-12} $,
   partendo da $ x_0 $ = 0 (e $ x_1 $ = 0.1 per il metodo delle secanti).
   Tabulare i risultati, in modo da confrontare il costo computazionale di ciascun metodo.}
-\textbf{Osservazione:} Il \textit{V.f.}, presente nella tabella, rappresenta le \textit{Valutazioni funzionali}.\\
 \textbf{Soluzione:}
 \begin{center}
   \setlength\tabcolsep{2pt}
@@ -404,110 +403,107 @@ con il medesimo procedimento.
   \end{bmatrix}
 \]
 
-La complessità per la funzione LUpivoting e' di circa $ \frac{2}{3}n^3 $, mentre per la risoluzione del sistema lineare e' di circa $ n^2 $.
+La complessità per la funzione LUpivot e' di circa $ \frac{2}{3}n^3 $, mentre per la risoluzione del sistema lineare e' di circa $ n^2 $.
 
 \section{Scrivere una \textit{function} Matlab, function x = mialdl(A, b) che, dati in ingresso una matrice sdp \textbf{A} ed un vettore \textbf{b},
   calcoli la soluzione del corrispondente sistema lineare utilizzando la fattorizzazione \textbf{$LDL^T$}.
   Curare particolarmente la scrittura e l'efficienza della \textit{function}, e validarla su due esempi non banali, generati casualmente,
   di cui sia nota la soluzione.}
 \begin{lstlisting}[style=Matlab-editor]
-  function x = mialdl(A, b)
-  %x = mialdl(A, b)
-  %Input:
-  %A: Matrice simmetrica definita positiva(sdp).
-  %b: Vettore dei termini noti.
-  %Output:
-  %x: Soluzione del sistema lineare.
-  %Risolve il sistema Ax = b, andando ad utilizzare la fattorizzazione LDL^t.
-  
-  if(size(A, 1)~=size(A, 2)), error("La matrice non e' quadrata." + newline + "Riprovare."), end
-  if(size(A, 1)~=size(b)), error("La dimensione del vettore dei termini noti e quella della matrice non coincidono." + newline + "Riprovare."), end
-     
-  LDLt = fattLDLt(A); %Fattorizzo la matrice tramite la fattorizzazione LDLt
-  x = ltud(LDLt, b); %Risolvo il sistema Lx = b
-  x = diagonal(LDLt, x);  %Risolvo Dx = b (b e' la soluzione 'x' precedente)
-  x = utud(LDLt', x); %Risolvo il sistema L'x = b (b e' la soluzione 'x' precedente)
-  return;
-  end
-      
-  function LDLt = fattLDLt(A)
-  %LDLt = fattLDLt(A)
-  %Input:
-  %A = Matrice simmetrica definita positiva(sdp).
-  %Output:
-  %LDLt: Fattorizzazione della matrice A in LDLt:
-  % -L = Matrice triangolare inferiore a diagonale unitaria.
-  % -D = Matrice diagonale.
-  %Esegue la fattorizzazione LDL^t.
-  
-  LDLt = A;
-  if(LDLt(1, 1) <= 0), error("La matrice non e' sdp." + newline + "Riprovare."), end
-  
-  n = size(A);
-  LDLt(2:n, 1) = LDLt(2:n, 1)/LDLt(1, 1);
-  
-  for i = 2:n
-      v = (LDLt(i, 1:i-1).').*diag(LDLt(1:i-1, 1:i-1));
-      LDLt(i, i) = LDLt(i, i) - LDLt(i, 1:i-1)*v;
-      if(LDLt(i,i) <= 0), error("La matrice non e' sdp." + newline + "Riprovare."), end
-      LDLt(i+1:n, i) = (LDLt(i+1:n, i)-LDLt(i+1:n, 1:i-1) *v)/LDLt(i, i);
-  end
-  return;
-  end
-      
-  function b = ltud(L, b)
-  %b = ltud(L, b)
-  %ltud = triangolare inferiore a diagonale unitaria.
-  %Input:
-  %L = Matrice triangolare inferiore a diagonale unitaria.
-  %b = Vettore dei termini noti.
-  %Output:
-  %b = Soluzione del sistema.
-  %Risolve un sistema triangolare inferiore.
-  
-  n = size(L, 1);
-  for i = 1:n
-     b(i)=b(i)-L(i,1:i-1)*b(1:i-1);
-  end
-  end
-      
-  function x = diagonal(D, b)
-  %x = diagonal(D, b)
-  %Input:
-  %D = Matrice diagonale
-  %b = Vettore dei termini noti
-  %Output:
-  %x = Soluzione del sistema lineare Dx = b
-  %Risolve un sistema diagonale.
-  
-  n = size(D);
-  x = b(:);
-  for i = 1:n
-      x(i) = x(i)/D(i, i);
-  end
-  end
-      
-  function x = utud(U, b)
-  %x = utud(U, b)
-  %utud = triangolare superiore a diagonale unitaria.
-  %Input:
-  %U = Matrice triangolare superiore a diagonale unitaria.
-  %b = Vettore dei termini noti.
-  %Output:
-  %x = Soluzione del sistema lineare Ux = b.
-  %Risolve un sistema triangolare superiore.
-  
-  n = size(U);
-  x = b(:);
-  for i = n:-1:1
-    x(i)=x(i)-U(i,i+1:n)*x(i+1:n);
-  end
-  end
+function x = mialdl(A, b)
+%x = mialdl(A, b)
+%Input:
+%A: Matrice simmetrica definita positiva(sdp).
+%b: Vettore dei termini noti.
+%Output:
+%x: Soluzione del sistema lineare.
+%Risolve il sistema Ax = b, andando ad utilizzare la fattorizzazione LDL^t.
+
+if(size(A, 1)~=size(A, 2)), error("La matrice non e' quadrata." + newline + "Riprovare."), end
+if(size(A, 1)~=size(b)), error("La dimensione del vettore dei termini noti e quella della matrice non coincidono." + newline + "Riprovare."), end
+    
+LDLt = fattLDLt(A); %Fattorizzo la matrice tramite la fattorizzazione LDLt
+x = ltud(LDLt, b); %Risolvo il sistema Lx = b
+x = diagonal(LDLt, x);  %Risolvo Dx = b (b e' la soluzione 'x' precedente)
+x = utud(LDLt', x); %Risolvo il sistema L'x = b (b e' la soluzione 'x' precedente)
+return;
+end
+    
+function LDLt = fattLDLt(A)
+%LDLt = fattLDLt(A)
+%Input:
+%A = Matrice simmetrica definita positiva(sdp).
+%Output:
+%LDLt: Fattorizzazione della matrice A in LDLt:
+% -L = Matrice triangolare inferiore a diagonale unitaria.
+% -D = Matrice diagonale.
+%Esegue la fattorizzazione LDL^t.
+
+LDLt = A;
+if(LDLt(1, 1) <= 0), error("La matrice non e' sdp." + newline + "Riprovare."), end
+
+n = size(A);
+LDLt(2:n, 1) = LDLt(2:n, 1)/LDLt(1, 1);
+
+for i = 2:n
+    v = (LDLt(i, 1:i-1).').*diag(LDLt(1:i-1, 1:i-1));
+    LDLt(i, i) = LDLt(i, i) - LDLt(i, 1:i-1)*v;
+    if(LDLt(i,i) <= 0), error("La matrice non e' sdp." + newline + "Riprovare."), end
+    LDLt(i+1:n, i) = (LDLt(i+1:n, i)-LDLt(i+1:n, 1:i-1) *v)/LDLt(i, i);
+end
+return;
+end
+    
+function b = ltud(L, b)
+%b = ltud(L, b)
+%ltud = triangolare inferiore a diagonale unitaria.
+%Input:
+%L = Matrice triangolare inferiore a diagonale unitaria.
+%b = Vettore dei termini noti.
+%Output:
+%b = Soluzione del sistema.
+%Risolve un sistema triangolare inferiore.
+
+n = size(L, 1);
+for i = 1:n
+    b(i)=b(i)-L(i,1:i-1)*b(1:i-1);
+end
+end
+    
+function x = diagonal(D, b)
+%x = diagonal(D, b)
+%Input:
+%D = Matrice diagonale
+%b = Vettore dei termini noti
+%Output:
+%x = Soluzione del sistema lineare Dx = b
+%Risolve un sistema diagonale.
+
+n = size(D);
+x = b(:);
+for i = 1:n
+    x(i) = x(i)/D(i, i);
+end
+end
+    
+function x = utud(U, b)
+%x = utud(U, b)
+%utud = triangolare superiore a diagonale unitaria.
+%Input:
+%U = Matrice triangolare superiore a diagonale unitaria.
+%b = Vettore dei termini noti.
+%Output:
+%x = Soluzione del sistema lineare Ux = b.
+%Risolve un sistema triangolare superiore.
+
+n = size(U);
+x = b(:);
+for i = n:-1:1
+  x(i)=x(i)-U(i,i+1:n)*x(i+1:n);
+end
+end
 \end{lstlisting}
 
-I test sono stati effettuati generando casualmente le matrici, le quali sono state moltiplicate per la medesima trasposta,
-in maniera tale da ottenere, quasi sicuramente, una matrice SDP.
-\\ \\
 \textbf{1° Test:}
 \[
   A =
@@ -667,6 +663,7 @@ generata dall'operatore $ \backslash $ di Matlab.
 La complessita' e' di circa $ \frac{2}{ 3}n^2(3m-n) $, dove \textit{n} e'
 il numero delle colonne e \textit{m} il numero delle righe.
 
+\newpage
 \section{Data la \textit{function} Matlab}
 \begin{lstlisting}[style=Matlab-editor]
   function [A1,A2,b1,b2] = linsis1(n,simme)
@@ -724,7 +721,7 @@ esso, risulta essere pari a: 9.99999589290263e+09.
 \\
 \textbf{Osservazione:} I due numeri di condizionamento delle matrici sono stati calcolati mediante la funzione \textbf{cond} di Matlab.
 
-
+\newpage
 \section{Risolvere, utilizzando la \textit{function} \textbf{mialdlt}, i sistemi
   lineari generati da \textbf{$ [A1,A2,b1,b2]=linsis(5,1)$}.
   \\
@@ -1231,6 +1228,7 @@ function ll = lebesgue(a, b, nn, type)
 %type = Tipologia scelta per risolvere l'esercizio.
 %Output:
 %ll = Approssimazione della costante di Lebesgue.
+%Calcola l'approssimazione della costante di Lebesgue sull'intervallo [a, b].
 
 if nargin < 4
     error("Il numero degli argomenti e' errato." + newline + "Riprovare.");
@@ -1290,6 +1288,7 @@ lenta rispetto le prime.
  \\
  \includegraphics*[scale=0.80]{./esercizi/imgs/grafico_21.pdf}
 
+\newpage
 \section{
   Costruire una function, \textbf{myspline.m}, avente sintassi
   $$ yy = myspline( xi, fi, xx, type ) $$
@@ -1308,7 +1307,7 @@ function yy = myspline(xi, fi, xx, type)
 %yy = Spline calcolata.
 %Calcola la spline cubica interpolante naturale oppure la not-a-knot, a
 %seconda del valore di type.
-  
+
 if nargin < 4
     error("Il numero degli argomenti e' errato." + newline + "Riprovare.");
 elseif length(xi) ~= length(fi)
@@ -1320,7 +1319,7 @@ elseif size(xi, 2) > 1 || size(fi, 2) > 1
 elseif isempty(xx)
     error("La partizione assegnata e' vuota." + newline + "Riprovare.");
 end
-  
+
 n = length(xi) - 1;
 epsilon = zeros(n-1,1); %Vettore sovradiagonale
 q = zeros(n-1,1); %Vettore sottodiagonale
@@ -1331,35 +1330,39 @@ for i = 2 : n
     q(i-1) = hi / (hi + hi1);
     epsilon(i-1) = hi1 / (hi + hi1);
 end
-  
+
 diff_div = diff_div_spline(xi, fi); %Calcolo le differenze divise
-  
+
 a = 2*ones(n-1,1);
 if type == 0
-    m = tridia(a, q, epsilon, diff_div * 6);
+    m = tridia(a, epsilon, q, diff_div * 6);
     m = [0; m; 0];
 else
+    diff_div = diff_div * 6;
+
     a(1) = 2 - q(1);
     epsilon(1) = epsilon(1) - q(1);
+    diff_div_1 = diff_div(1);
     diff_div(1) = (1 - q(1)) * diff_div(1);
     q(1) = 0;
 
     a(n-1) = 2 - epsilon(n-1);
     q(n-1) = q(n-1) - epsilon(n-1);
+    diff_div_n = diff_div(n-1);
     diff_div(n-1) = (1 - epsilon(n-1)) * diff_div(n-1);
     epsilon(n-1) = 0;
-  
-    m = tridia(a, q, epsilon, diff_div * 6);
-  
-    m0 = diff_div(1) - m(1) - m(2);
-    mn =  diff_div(n-1) - m(n-1) - m(n-2);
+
+    m = tridia(a, epsilon, q, diff_div);
+
+    m0 = diff_div_1 - m(1) - m(2);
+    mn = diff_div_n - m(n-1) - m(n-2);
     m = [m0; m; mn];
 end
-  
+
 yy = calcola_punti(xi, fi, m, xx);
 return;
 end
-  
+
 function diff_div = diff_div_spline(xi, fi)
 %diff_div = diffdivspline(xi, fi)
 %Input:
@@ -1368,7 +1371,7 @@ function diff_div = diff_div_spline(xi, fi)
 %Output:
 %diff_div = Differenze divise calcolate.
 %Calcola le differenze divise per la spline
- 
+
 n = size(xi);
 diff_div = fi;
 n = n-1;
@@ -1380,7 +1383,7 @@ end
 diff_div = diff_div(3:n+1);
 return;
 end
-  
+
 function x = tridia(a, b, c, g)
 %x = tridia(a, b, c, g)
 %Input:
@@ -1389,24 +1392,24 @@ function x = tridia(a, b, c, g)
 %c = Vettore sottodiagonale.
 %g = Vettore dei termini noti.
 %Output:
-%x = Vettore soluzione
+%x = Vettore soluzione.
 %Risoluzione di un sistema tridiagonale.
-  
+
 n = length(g);
 x = g;
 for i = 1 : n-1
-   b(i) = b(i)/a(i);
-   a(i+1) = a(i+1) - b(i)*c(i);
-   x(i+1) = x(i+1) - b(i)*x(i);
+    b(i) = b(i)/a(i);
+    a(i+1) = a(i+1) - b(i)*c(i);
+    x(i+1) = x(i+1) - b(i)*x(i);
 end
-  
+
 x(n) = x(n)/a(n);
 for i = n-1 : -1 : 1
-  x(i) = (x(i) - c(i)*x(i+1))/a(i);
+    x(i) = (x(i) - c(i)*x(i+1))/a(i);
 end
 return;
 end
-  
+
 function yy = calcola_punti(xi, fi, m, xx)
 %yy = calcola_punti(xi, fi, m, xx)
 %Input:
@@ -1417,9 +1420,9 @@ function yy = calcola_punti(xi, fi, m, xx)
 %Output:
 %yy = Valori della spline.
 %Calcola i valori della spline nei punti definiti in xx.
-  
+
 yy = zeros(length(xx), 1);
- 
+
 for j = 1 : length(xx)
     for i = 2 : length(xi) 
         if((xx(j) >= xi(i-1) && xx(j) <= xi(i)) || xx(j) < xi(1))
@@ -1442,11 +1445,11 @@ utilizzando una partizione $ \delta = {-5 = x_0 < \cdots < x_n = 5} $, con ascis
 \\
 Utilizzare 10001 punti equispaziati nell'intervallo $ [-5,5] $ per ottenere la stima dell'errore.
 }
-Di seguito viene riportato il grafico dell'andamento dell'errore do approssimazione, utilizzando
+Di seguito viene riportato il grafico dell'andamento dell'errore di approssimazione, utilizzando
 le \textit{spline} interpolanti naturale e \textit{not-a-knot}, per approssimare la funzione di 
 Runge nell'intervallo desiderato.
 \\
-\includegraphics*[scale=0.80]{} METTERE GRAFICO 23
+\includegraphics*[scale=0.80]{./esercizi/imgs/grafico_23.pdf}
 
 
 \section{
@@ -1461,7 +1464,40 @@ Runge nell'intervallo desiderato.
   goritmo che avrete implementato (potete utilizzare, se lo ritenete opportuno, la function \textbf{polyfit}
   di Matlab).
  }
-DA FINIRE
+Di seguito viene riportato lo script usato per andare a stimare il grado \textit{n}:
+\\
+\begin{lstlisting}[style=Matlab-editor]
+load("data.mat");
+format lonG;
+x = data(:, 1);
+y = data(:, 2);
+errori = zeros(10, 1);
+for i = 1 : 10
+  p = polyfit(x, y, i);
+  y_tilde = polyval(p, x);
+  errori(i) = norm(x.^i - y_tilde);
+end
+
+[errore, grado] = min(errori);
+disp(errore);
+disp(grado);
+
+plot(1:10, errori);
+xlabel("Grado del polinomio");
+ylabel("Norma del residuo");
+\end{lstlisting}
+
+Per la realizzazione di questo Script si e' andati inizialmente a caricare i dati forniti nel file 
+\textit{data.mat} ed inizializzare il vettore contenente gli errori.
+Dopodichè, siamo andati a calcolarci i coefficienti del polinomio mediante la funzione \textit{polyfit} di
+Matlab e a valutare il valore del polinomio.
+Successivamente, dato che sapevamo che il fenomeno sarebbe cresciuto come \textit{y = $ x^n $}, abbiamo
+calcolato l'errore commesso.
+Infine, abbiamo preso il grado minimo \textit{n} mediante la funzione \textit{min} fornita da Matlab e abbiamo
+creato il grafico, il quale viene riportato di seguito.
+\\
+\includegraphics*[scale=0.80]{./esercizi/imgs/grafico_24.pdf}
+
 
 \section{
   Costruire una function Matlab che, dato in input \textit{n}, restituisca i pesi della qua-
@@ -1517,6 +1553,7 @@ Di seguito viene riportata la tabella contente i pesi calcolati, per ogni grado 
 \end{spacing}
 \end{center}
 
+\newpage
 \section{
   Scrivere una function Matlab,
   $$ [If,err] = composita( fun, a, b, k, n ) $$
@@ -1677,7 +1714,7 @@ function [I2, nvalfunz] = composita_adattiva_newton_cotes_4(a, b, f, tol, fa, fm
 %Output:
 %I2 = Approssimazione calcolata.
 %nvalfunz = Numero di valutazioni funzionali.
-%
+%Calcola l'approssimazione dell'integrale mediante la formula adattiva di Newton-Cotes di grado k = 4.
 
 if tol <= 0, error("La tolleranza deve essere positiva." + newline + "Riprovare."), end
 if a >= b, error("L'intervallo e' stato inserito in maniera non corretta." + newline + "Riprovare."), end

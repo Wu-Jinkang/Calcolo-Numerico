@@ -37,23 +37,27 @@ diff_div = diff_div_spline(xi, fi); %Calcolo le differenze divise
 
 a = 2*ones(n-1,1);
 if type == 0
-    m = tridia(a, q, epsilon, diff_div * 6);
+    m = tridia(a, epsilon, q, diff_div * 6);
     m = [0; m; 0];
 else
+    diff_div = diff_div * 6;
+
     a(1) = 2 - q(1);
     epsilon(1) = epsilon(1) - q(1);
+    diff_div_1 = diff_div(1);
     diff_div(1) = (1 - q(1)) * diff_div(1);
     q(1) = 0;
 
     a(n-1) = 2 - epsilon(n-1);
     q(n-1) = q(n-1) - epsilon(n-1);
+    diff_div_n = diff_div(n-1);
     diff_div(n-1) = (1 - epsilon(n-1)) * diff_div(n-1);
     epsilon(n-1) = 0;
 
-    m = tridia(a, q, epsilon, diff_div * 6);
+    m = tridia(a, epsilon, q, diff_div);
 
-    m0 = diff_div(1) - m(1) - m(2);
-    mn =  diff_div(n-1) - m(n-1) - m(n-2);
+    m0 = diff_div_1 - m(1) - m(2);
+    mn = diff_div_n - m(n-1) - m(n-2);
     m = [m0; m; mn];
 end
 
@@ -90,7 +94,7 @@ function x = tridia(a, b, c, g)
 %c = Vettore sottodiagonale.
 %g = Vettore dei termini noti.
 %Output:
-%x = Vettore soluzione
+%x = Vettore soluzione.
 %Risoluzione di un sistema tridiagonale.
 
 n = length(g);

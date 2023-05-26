@@ -6,6 +6,7 @@ function ll = lebesgue(a, b, nn, type)
 %type = Tipologia scelta per risolvere l'esercizio.
 %Output:
 %ll = Approssimazione della costante di Lebesgue.
+%Calcola l'approssimazione della costante di Lebesgue sull'intervallo [a, b].
 
 if nargin < 4
     error("Il numero degli argomenti e' errato." + newline + "Riprovare.");

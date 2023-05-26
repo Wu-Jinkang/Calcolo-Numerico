@@ -13,7 +13,7 @@ function [I2, nvalfunz] = composita_adattiva_newton_cotes_4(a, b, f, tol, fa, fm
 %Output:
 %I2 = Approssimazione calcolata.
 %nvalfunz = Numero di valutazioni funzionali.
-%
+%Calcola l'approssimazione dell'integrale mediante la formula adattiva di Newton-Cotes di grado k = 4.
 
 if tol <= 0, error("La tolleranza deve essere positiva." + newline + "Riprovare."), end
 if a >= b, error("L'intervallo e' stato inserito in maniera non corretta." + newline + "Riprovare."), end
