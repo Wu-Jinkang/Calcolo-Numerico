@@ -15,7 +15,6 @@ tol_13 = 1e-13;
 %fprintf([repmat('%.2f\t', 1, size(Q, 2)) '\n'], Q');
 %testfsin = fsin(1:1:100);
 %fprintf([repmat('%.2f\t', 1, size(testfsin, 2)) '\n'], testfsin');
-
 [x, nit] = newton_j(grad, jacob, zeros(n,1), tol, 1000);
 [x_8, nit_8] = newton_j(grad, jacob, zeros(n,1), tol_8, 1000);
 [x_13, nit_13] = newton_j(grad, jacob, zeros(n,1), tol_13, 1000);

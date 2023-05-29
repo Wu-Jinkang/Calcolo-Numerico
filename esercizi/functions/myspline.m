@@ -10,7 +10,7 @@ function yy = myspline(xi, fi, xx, type)
 %Calcola la spline cubica interpolante naturale oppure la not-a-knot, a
 %seconda del valore di type.
 
-if nargin < 4
+if nargin < 3
     error("Il numero degli argomenti e' errato." + newline + "Riprovare.");
 elseif length(xi) ~= length(fi)
     error("La lunghezza dei due vettori non corrisponde." + newline + "Riprovare.");
@@ -36,10 +36,9 @@ end
 diff_div = diff_div_spline(xi, fi); %Calcolo le differenze divise
 
 a = 2*ones(n-1,1);
-if type == 0
-    m = tridia(a, epsilon, q, diff_div * 6);
-    m = [0; m; 0];
-else
+
+%Caso default oppure type diverso da 0 -> Spline not-a-knot
+if nargin < 4 || type ~= 0
     diff_div = diff_div * 6;
 
     a(1) = 2 - q(1);
@@ -59,8 +58,12 @@ else
     m0 = diff_div_1 - m(1) - m(2);
     mn = diff_div_n - m(n-1) - m(n-2);
     m = [m0; m; mn];
+else
+    %Caso type == 1 -> Spline naturale
+    m = tridia(a, epsilon, q, diff_div * 6);
+    m = [0; m; 0];
 end
-
+   
 yy = calcola_punti(xi, fi, m, xx);
 return;
 end

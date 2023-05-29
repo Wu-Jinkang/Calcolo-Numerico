@@ -15,20 +15,23 @@ function [x, passi, valutazioni_funzionali] = secanti(x0, x1, func, tol, max)
 
 if ~exist("tol", "var"), tol=eps; end 
 if ~exist("max", "var"), max=1000; end
+
 valutazioni_funzionali = 0;
 passi=0;
-f=func(x0);
+f = func(x0);
 valutazioni_funzionali = valutazioni_funzionali +1;
-x=x1;
-for i=1:max
-    passi=passi+1;
-    if(abs(x-x0)<tol*(1+abs(x0))), break, end;
-    f0=f;
-    f=func(x);
+x = x1;
+for i = 1:max
+    passi = passi+1;
+    if(abs(x-x0)<tol*(1+abs(x0))), break, end
+    f0 = f;
+    f = func(x);
     valutazioni_funzionali = valutazioni_funzionali +1;
-    if(f0==f), disp("Precisione massima raggiunta."),break,end
-    x1=(f*x0-f0*x)/(f-f0); 
-    x0=x;
-    x=x1;
+    if f0 == f, disp("Precisione massima raggiunta."), break, end
+    x1 = (f*x0-f0*x)/(f-f0); 
+    x0 = x;
+    x = x1;
 end
 if abs(x-x1)>tol*(1+abs(x0)), disp("Il metodo non converge."), end
+return;
+end

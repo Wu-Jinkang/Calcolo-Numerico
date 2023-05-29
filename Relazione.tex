@@ -141,7 +141,7 @@ come criterio di arresto $$ |x_{n+1} - x_n| \le \textit{tol} \cdot (1 + |x_n|), 
 essendo \textit{tol} una opportuna tolleranza specificata in ingresso.
 Curare particolarmente la robustezza del codice.}
 \begin{lstlisting}[style=Matlab-editor]
-  function [x, passi, valutazioni_funzionali] = newton(x0, f, f1, tol, max)
+function [x, passi, valutazioni_funzionali] = newton(x0, f, f1, tol, max)
 %[x, passi, valutazioni_funzionali] = newton(x0, f, f1, tol, max)
 %Input
 %x0 = Punto di partenza
@@ -159,60 +159,67 @@ Curare particolarmente la robustezza del codice.}
 if ~exist("max", "var"), max=1000; end
 if ~exist("tol", "var"), tol=eps; end
 
-passi=1;
+passi = 1;
 valutazioni_funzionali = 0;
-fx=f(x0);
-f1x=f1(x0);
+fx = f(x0);
+f1x = f1(x0);
 valutazioni_funzionali = valutazioni_funzionali + 2;
-if(f1x==0),error("Derivata prima uguale a 0." + newline + "Riprovare."),end
-x=x0-fx/f1x;
+
+if f1x == 0, error("Derivata prima uguale a 0." + newline + "Riprovare."),end
+
+x = x0-fx/f1x;
 while(passi < max) && abs(x-x0)>tol*(1+abs(x0))
-    passi=passi+1;
-    x0=x;
-    fx=f(x0);
-    f1x=f1(x0);
+    passi = passi+1;
+    x0 = x;
+    fx = f(x0);
+    f1x = f1(x0);
     valutazioni_funzionali = valutazioni_funzionali + 2;
-    if(f1x==0),error("Derivata prima uguale a 0." + newline + "Riprovare."),end
-    x=x0-fx/f1x;
+    if f1x==0, error("Derivata prima uguale a 0." + newline + "Riprovare."),end
+    x = x0-fx/f1x;
 end
 if abs(x-x0)>tol*(1+abs(x0)),error("Il metodo non converge." + newline + "Riprovare."),end
+return;
+end
 \end{lstlisting}
 
 \begin{lstlisting}[style=Matlab-editor]
-  function [x, passi, valutazioni_funzionali] = secanti(x0, x1, func, tol, max)
-  %[x, passi, valutazioni_funzionali] = secanti(x0, x1, f, tol, max)
-  %Input:
-  %x0 = Punto di partenza
-  %x1 = Punto calcolato con un iterazione del metodo di Newton da x0
-  %func = Funzione di cui si vuole conoscere la radice
-  %Input opzionali:
-  %tol = Tolleranza richiesta (default = impostata sulla precisone di macchina)
-  %max = Numero massimo di iterazioni (default = impostati a 1000)
-  %Output:
-  %x = Soluzione approssimata
-  %passi = Numero di passi effetutati prima di raggiungere la tolleranza desiderata 
-  %valutazioni_funzionali = Numero di valutazioni funzionali effettuate dal metodo
-  %Calcola un'approssimazione della radice della funzione passata come argomento.
-  
-  if ~exist("tol", "var"), tol=eps; end 
-  if ~exist("max", "var"), max=1000; end
-  valutazioni_funzionali = 0;
-  passi=0;
-  f=func(x0);
-  valutazioni_funzionali = valutazioni_funzionali +1;
-  x=x1;
-  for i=1:max
-      passi=passi+1;
-      if(abs(x-x0)<tol*(1+abs(x0))), break, end;
-      f0=f;
-      f=func(x);
-      valutazioni_funzionali = valutazioni_funzionali +1;
-      if(f0==f), disp("Precisione massima raggiunta."),break,end
-      x1=(f*x0-f0*x)/(f-f0); 
-      x0=x;
-      x=x1;
-  end
-  if abs(x-x1)>tol*(1+abs(x0)), disp("Il metodo non converge."), end
+function [x, passi, valutazioni_funzionali] = secanti(x0, x1, func, tol, max)
+%[x, passi, valutazioni_funzionali] = secanti(x0, x1, f, tol, max)
+%Input:
+%x0 = Punto di partenza
+%x1 = Punto calcolato con un iterazione del metodo di Newton da x0
+%func = Funzione di cui si vuole conoscere la radice
+%Input opzionali:
+%tol = Tolleranza richiesta (default = impostata sulla precisone di macchina)
+%max = Numero massimo di iterazioni (default = impostati a 1000)
+%Output:
+%x = Soluzione approssimata
+%passi = Numero di passi effetutati prima di raggiungere la tolleranza desiderata 
+%valutazioni_funzionali = Numero di valutazioni funzionali effettuate dal metodo
+%Calcola un'approssimazione della radice della funzione passata come argomento.
+
+if ~exist("tol", "var"), tol=eps; end 
+if ~exist("max", "var"), max=1000; end
+
+valutazioni_funzionali = 0;
+passi=0;
+f = func(x0);
+valutazioni_funzionali = valutazioni_funzionali +1;
+x = x1;
+for i = 1:max
+    passi = passi+1;
+    if(abs(x-x0)<tol*(1+abs(x0))), break, end
+    f0 = f;
+    f = func(x);
+    valutazioni_funzionali = valutazioni_funzionali +1;
+    if f0 == f, disp("Precisione massima raggiunta."), break, end
+    x1 = (f*x0-f0*x)/(f-f0); 
+    x0 = x;
+    x = x1;
+end
+if abs(x-x1)>tol*(1+abs(x0)), disp("Il metodo non converge."), end
+return;
+end
 \end{lstlisting}
 
 \section{Utilizzare le \textit{function} del precedente esercizio per determinare una approssimazione
@@ -240,7 +247,7 @@ if abs(x-x0)>tol*(1+abs(x0)),error("Il metodo non converge." + newline + "Riprov
   \end{tabular}
   \newline
 \end{center}
-Per calcolare il costo computazionale e' stato fondamentale andare a contare le valutazioni funzionali, eseguite da ogni algoritmo,
+Per calcolare il costo computazionale si e' andati a contare le valutazioni funzionali, eseguite da ogni algoritmo,
 per ogni iterazione. Come dimostra la tabella, e' possibile affermare che il metodo delle \textbf{Secanti} richiede meno valutazioni
 rispetto quello di \textbf{Newton}, dove, per quest'ultimo, e' necessario andare anche a calcolare la derivata prima della funzione, che e':
 \[f'(x) = 1 + sin(x).\]
@@ -663,7 +670,6 @@ generata dall'operatore $ \backslash $ di Matlab.
 La complessita' e' di circa $ \frac{2}{ 3}n^2(3m-n) $, dove \textit{n} e'
 il numero delle colonne e \textit{m} il numero delle righe.
 
-\newpage
 \section{Data la \textit{function} Matlab}
 \begin{lstlisting}[style=Matlab-editor]
   function [A1,A2,b1,b2] = linsis1(n,simme)
@@ -898,6 +904,9 @@ Di seguito vengono riportati sia la tabella contenente tutte le
 soluzioni calcolate dalla \textit{function} newton,
 dell'esercizio 14, per ogni tolleranza richiesta, che 
 il grafico ottenuto.
+\\
+\textbf{Osservazione:} si e' voluto creare un unico plot contenente tutti e 3 i risultati,
+per mostrare che questi ultimi sono tutti pressoche' uguali.
 
 \begin{center}
   \begin{longtable}{ |p{2.8cm}|p{2.8cm}|p{2.8cm}| }
@@ -1008,7 +1017,7 @@ il grafico ottenuto.
     25.2343922260257  & 25.2244798518307  & 25.224479941140     \\
     \hline
   \end{longtable}
-  \includegraphics[]{./esercizi/imgs/graficonewtonj.pdf}
+  \includegraphics*[scale=0.80]{./esercizi/imgs/graficonewtonj.pdf}
 \end{center}
 
 \section{
@@ -1019,7 +1028,6 @@ il grafico ottenuto.
   \textbf{N.B.:} il risultato dovra' avere \underline{le stesse dimensioni} del dato di ingresso; questo vale anche per gli
   esercizi a seguire.
  }
-
 \begin{lstlisting}[style=Matlab-editor]
 function s = lagrange(x, y, xq)
 %s = lagrange(x, y, xq)
@@ -1058,6 +1066,7 @@ Per creare questa \textit{function} si e' andati, inizialmente, a calcolare la
 produttoria \[ Lin(x) = \prod_{j = 0, j != i}^{n} \frac{x - x_j}{x_i - x_j} \]
 e successivamente la sommatoria \[ p(x) = \sum_{i = 0}^{n} f_i * L_{in}(x). \]
 
+\newpage
 \section{
   Costruire una function, \textbf{newton.m}, avente la \underline{stessa sintassi} della function \textbf{spline}
   di Matlab, che implementi, in modo \underline{vettoriale}, la forma di Newton del polinomio interpolante una
@@ -1110,7 +1119,7 @@ vettore delle differenze divise, implementato nella \textit{function differenze\
 successivamente si e' andati ad utilizzare l'algoritmo di Horner, per ridurre
 il numero di operazioni, per calcolare i valori del polinomio nelle ascisse \textit{xq}.
 
-
+\newpage
 \section{
   Costruire una function, \textbf{hermite.m}, avente sintassi
   $$ yy = hermite( xi, fi, f1i, xx) $$
@@ -1210,6 +1219,7 @@ mediante la formula:
 \[ x_{n-i} = \frac{a + b}{2} + \frac{b - a}{2} * \cos \left( \frac{2i + 1}{2(n+1)} \pi \right) \]
 per i che va da 0 ad \textit{n}, dove \textit{n} e' il grado del polinomio.
 
+\newpage
 \section{
   Costruire una function Matlab, con sintassi
   $$ ll = lebesgue( a, b, nn, type ), $$
@@ -1308,7 +1318,7 @@ function yy = myspline(xi, fi, xx, type)
 %Calcola la spline cubica interpolante naturale oppure la not-a-knot, a
 %seconda del valore di type.
 
-if nargin < 4
+if nargin < 3
     error("Il numero degli argomenti e' errato." + newline + "Riprovare.");
 elseif length(xi) ~= length(fi)
     error("La lunghezza dei due vettori non corrisponde." + newline + "Riprovare.");
@@ -1334,10 +1344,9 @@ end
 diff_div = diff_div_spline(xi, fi); %Calcolo le differenze divise
 
 a = 2*ones(n-1,1);
-if type == 0
-    m = tridia(a, epsilon, q, diff_div * 6);
-    m = [0; m; 0];
-else
+
+%Caso default oppure type diverso da 0 -> Spline not-a-knot
+if nargin < 4 || type ~= 0
     diff_div = diff_div * 6;
 
     a(1) = 2 - q(1);
@@ -1357,8 +1366,12 @@ else
     m0 = diff_div_1 - m(1) - m(2);
     mn = diff_div_n - m(n-1) - m(n-2);
     m = [m0; m; mn];
+else
+    %Caso type == 1 -> Spline naturale
+    m = tridia(a, epsilon, q, diff_div * 6);
+    m = [0; m; 0];
 end
-
+    
 yy = calcola_punti(xi, fi, m, xx);
 return;
 end
